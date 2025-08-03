@@ -1,5 +1,9 @@
 # markiiup
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub issues](https://img.shields.io/github/issues/yourusername/markiiup)](https://github.com/yourusername/markiiup/issues)
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/markiiup)](https://github.com/yourusername/markiiup/stargazers)
+
 A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format.
 
 ![markiiup Logo](markiiup.png)
@@ -121,7 +125,7 @@ Feel free to submit issues and enhancement requests!
 
 ## License
 
-This project is open source. Feel free to use and modify as needed.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
