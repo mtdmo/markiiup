@@ -1,8 +1,8 @@
 # markiiup
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/markiiup)](https://github.com/yourusername/markiiup/issues)
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/markiiup)](https://github.com/yourusername/markiiup/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/issues)
+[![GitHub stars](https://img.shields.io/github/stars/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/stargazers)
 
 A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format.
 
