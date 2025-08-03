@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>markiiup - Word Editor to Markdown</title>
-    <link rel="icon" type="image/png" href="markiiup.png">
+    <link rel="icon" type="image/png" href="markiiup_cat.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -129,13 +129,19 @@
         }
         
         .btn:hover {
-            background-color: rgba(47, 174, 172, 0.1) !important;
-            border-color: #2FAEAC !important;
-            color: #259997 !important;
+            background-color: transparent !important;
+            border-color: transparent !important;
         }
         
         .btn-sm {
             padding: 0.5rem !important;
+        }
+        
+        /* Increase navbar height */
+        .navbar {
+            min-height: 5rem !important;
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
         }
         
         /* Material Icons styling */
@@ -143,10 +149,42 @@
             color: #2FAEAC !important;
             font-size: 40px !important;
             line-height: 1 !important;
+            transition: color 0.2s ease !important;
+            display: block !important;
         }
         
         .btn:hover .material-icons {
-            color: #259997 !important;
+            color: #1a7573 !important; /* Darker teal on hover */
+        }
+        
+        /* Fix alignment for navbar center items */
+        .navbar-center {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+        }
+        
+        .navbar-center .join,
+        .navbar-center .select,
+        .navbar-center .divider {
+            display: flex !important;
+            align-items: center !important;
+        }
+        
+        /* Ensure proper button sizing for larger icons */
+        .btn-sm {
+            height: 3.5rem !important;
+            min-height: 3.5rem !important;
+            padding: 0.5rem !important;
+        }
+        
+        /* Fix select dropdown height to match larger buttons */
+        .select-sm {
+            height: 3.5rem !important;
+            min-height: 3.5rem !important;
+            font-size: 1rem !important;
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
         }
         
         /* Menu dropdown icon styling */
@@ -189,6 +227,76 @@
             background-color: rgba(47, 174, 172, 0.1) !important;
             color: #2FAEAC !important;
         }
+        
+        /* Fix for underline button - ensure no dropdown styling */
+        #underline-btn {
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        
+        #underline-btn::after {
+            display: none !important;
+        }
+        
+        /* Remove any pseudo-elements that might create dropdown arrows */
+        .join-item::after,
+        .join-item::before {
+            display: none !important;
+        }
+        
+        /* Settings Modal Theme Fix */
+        .modal-box {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        
+        .modal-box .label-text {
+            color: #1e293b !important;
+        }
+        
+        .modal-box .input {
+            background-color: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            color: #1e293b !important;
+        }
+        
+        .modal-box .input:focus {
+            border-color: #2FAEAC !important;
+            outline: 2px solid transparent !important;
+            outline-offset: 2px !important;
+        }
+        
+        .modal-box .btn-outline {
+            color: #2FAEAC !important;
+            border-color: #2FAEAC !important;
+        }
+        
+        .modal-box .btn-outline:hover {
+            background-color: #2FAEAC !important;
+            color: #ffffff !important;
+        }
+        
+        .modal-box .btn-primary {
+            background-color: #2FAEAC !important;
+            border-color: #2FAEAC !important;
+            color: #ffffff !important;
+        }
+        
+        .modal-box .btn-primary:hover {
+            background-color: #259997 !important;
+            border-color: #259997 !important;
+        }
+        
+        .modal-box .divider {
+            color: #cbd5e1 !important;
+        }
+        
+        .modal-box .divider:before,
+        .modal-box .divider:after {
+            background-color: #cbd5e1 !important;
+        }
+        
     </style>
 </head>
 <body data-theme="markiiup" class="min-h-screen bg-base-100">
@@ -223,13 +331,13 @@
             <div class="navbar-center">
                 <div class="join">
                     <!-- Text Formatting -->
-                    <button id="bold-btn" class="btn btn-sm join-item" title="Bold">
+                    <button id="bold-btn" class="btn btn-sm join-item">
                         <span class="material-icons">format_bold</span>
                     </button>
-                    <button id="italic-btn" class="btn btn-sm join-item" title="Italic">
+                    <button id="italic-btn" class="btn btn-sm join-item">
                         <span class="material-icons">format_italic</span>
                     </button>
-                    <button id="underline-btn" class="btn btn-sm join-item" title="Underline">
+                    <button id="underline-btn" class="btn btn-sm join-item">
                         <span class="material-icons">format_underlined</span>
                     </button>
                 </div>
@@ -237,7 +345,7 @@
                 <div class="divider divider-horizontal"></div>
                 
                 <!-- Heading Select -->
-                <select id="heading-select" class="select select-bordered w-36 h-10">
+                <select id="heading-select" class="select select-bordered select-sm w-36">
                     <option value="">Normal</option>
                     <option value="h1">Heading 1</option>
                     <option value="h2">Heading 2</option>
@@ -251,10 +359,10 @@
                 
                 <!-- List Controls -->
                 <div class="join">
-                    <button id="bullet-list-btn" class="btn btn-sm join-item" title="Bullet List">
+                    <button id="bullet-list-btn" class="btn btn-sm join-item">
                         <span class="material-icons">format_list_bulleted</span>
                     </button>
-                    <button id="number-list-btn" class="btn btn-sm join-item" title="Numbered List">
+                    <button id="number-list-btn" class="btn btn-sm join-item">
                         <span class="material-icons">format_list_numbered</span>
                     </button>
                 </div>
@@ -263,16 +371,16 @@
                 
                 <!-- Insert Tools -->
                 <div class="join">
-                    <button id="link-btn" class="btn btn-sm join-item" title="Insert Link">
+                    <button id="link-btn" class="btn btn-sm join-item">
                         <span class="material-icons">link</span>
                     </button>
-                    <button id="image-btn" class="btn btn-sm join-item" title="Insert Image">
+                    <button id="image-btn" class="btn btn-sm join-item">
                         <span class="material-icons">image</span>
                     </button>
-                    <button id="table-btn" class="btn btn-sm join-item" title="Insert Table">
+                    <button id="table-btn" class="btn btn-sm join-item">
                         <span class="material-icons">table_chart</span>
                     </button>
-                    <button id="comment-btn" class="btn btn-sm join-item" title="Add Comment">
+                    <button id="comment-btn" class="btn btn-sm join-item">
                         <span class="material-icons">comment</span>
                     </button>
                 </div>
@@ -280,10 +388,10 @@
             
             <div class="navbar-end">
                 <div class="join">
-                    <button id="toggle-comments-btn" class="btn btn-sm join-item" title="Toggle Comments Panel">
+                    <button id="toggle-comments-btn" class="btn btn-sm join-item">
                         <span class="material-icons">side_navigation</span>
                     </button>
-                    <button id="settings-btn" class="btn btn-sm join-item" title="Settings">
+                    <button id="settings-btn" class="btn btn-sm join-item">
                         <span class="material-icons">settings</span>
                     </button>
                 </div>
@@ -294,9 +402,6 @@
         <input type="checkbox" id="settings-modal" class="modal-toggle" />
         <div class="modal" role="dialog">
             <div class="modal-box w-11/12 max-w-2xl">
-                <form method="dialog">
-                    <label for="settings-modal" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="close-settings-btn">✕</label>
-                </form>
                 <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"></path></svg>
                     Settings

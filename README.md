@@ -92,7 +92,7 @@ cd markiiup
 
 ### Architecture
 - Single-page application
-- `WordMarksEditor` class handles all functionality
+- `MarkiiupEditor` class handles all functionality
 - Bidirectional HTML ↔ Markdown conversion
 - Real-time text processing for links and tags
 

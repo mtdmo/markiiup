@@ -1,6 +1,6 @@
 # Document Name
 
-This is a test document to demonstrate backlinks and wiki-style linking in WordMarks.
+This is a test document to demonstrate backlinks and wiki-style linking in markiiup.
 
 ## About This Document
 
@@ -20,7 +20,7 @@ This document uses tags like #documentation #testing #demo to categorize content
 
 ## Backlink Testing
 
-When you open this document in WordMarks, you should see backlinks from:
+When you open this document in markiiup, you should see backlinks from:
 - [[examplefile]] (which references this document)
 - Any other documents that link to "Document Name"
 

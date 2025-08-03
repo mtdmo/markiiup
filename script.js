@@ -1,4 +1,4 @@
-class WordMarksEditor {
+class MarkiiupEditor {
     constructor() {
         this.editor = document.getElementById('editor');
         this.currentFileName = 'untitled.md';
@@ -43,7 +43,6 @@ class WordMarksEditor {
         document.getElementById('comment-btn').addEventListener('click', () => this.addComment());
         document.getElementById('toggle-comments-btn').addEventListener('click', () => this.toggleCommentsPanel());
         document.getElementById('settings-btn').addEventListener('click', () => this.openSettings());
-        document.getElementById('close-settings-btn').addEventListener('click', () => this.closeSettings());
         document.getElementById('save-settings-btn').addEventListener('click', () => this.saveSettings());
         document.getElementById('debug-store-btn').addEventListener('click', () => this.showDebugInfo());
         document.getElementById('clear-store-btn').addEventListener('click', () => this.clearDocumentStore());
@@ -318,48 +317,70 @@ class WordMarksEditor {
     handleFileLoad(e) {
         const file = e.target.files[0];
         if (file) {
+            console.log('Loading file:', file.name);
             const reader = new FileReader();
             reader.onload = (e) => {
-                const content = e.target.result;
-                this.loadMarkdownContent(content);
-                this.currentFileName = file.name;
-                this.updateStats();
+                try {
+                    const content = e.target.result;
+                    console.log('File content loaded, length:', content.length);
+                    this.loadMarkdownContent(content);
+                    this.currentFileName = file.name;
+                    this.updateStats();
+                } catch (error) {
+                    console.error('Error loading file:', error);
+                    alert('Error loading file: ' + error.message);
+                }
+            };
+            reader.onerror = (e) => {
+                console.error('FileReader error:', e);
+                alert('Error reading file');
             };
             reader.readAsText(file);
         }
+        // Reset file input so the same file can be loaded again
+        e.target.value = '';
     }
 
     loadMarkdownContent(content) {
-        // Parse comments from markdown
-        this.comments = [];
-        this.commentCounter = 1;
-        
-        // Extract comments (looking for HTML comments with special format)
-        const commentRegex = /<!--\s*COMMENT\s*(\d+):\s*(.+?)\s*-->/g;
-        let match;
-        
-        while ((match = commentRegex.exec(content)) !== null) {
-            const commentId = `comment-${match[1]}`;
-            const commentData = JSON.parse(match[2]);
-            commentData.id = commentId;
-            this.comments.push(commentData);
-            this.commentCounter = Math.max(this.commentCounter, parseInt(match[1]) + 1);
+        try {
+            // Parse comments from markdown
+            this.comments = [];
+            this.commentCounter = 1;
+            
+            // Extract comments (looking for HTML comments with special format)
+            const commentRegex = /<!--\s*COMMENT\s*(\d+):\s*(.+?)\s*-->/g;
+            let match;
+            
+            while ((match = commentRegex.exec(content)) !== null) {
+                try {
+                    const commentId = `comment-${match[1]}`;
+                    const commentData = JSON.parse(match[2]);
+                    commentData.id = commentId;
+                    this.comments.push(commentData);
+                    this.commentCounter = Math.max(this.commentCounter, parseInt(match[1]) + 1);
+                } catch (e) {
+                    console.warn('Failed to parse comment:', match[0], e);
+                }
+            }
+            
+            // Remove comment markers from content for display
+            content = content.replace(commentRegex, '');
+            
+            // Convert markdown to HTML
+            this.editor.innerHTML = this.markdownToHtml(content);
+            
+            // Re-apply comment highlights
+            this.reapplyCommentHighlights();
+            this.updateCommentsPanel();
+            
+            // Process wiki links and tags after loading
+            this.processWikiLinks();
+            this.processTags();
+            this.updateBacklinksPanel();
+        } catch (error) {
+            console.error('Error in loadMarkdownContent:', error);
+            throw error;
         }
-        
-        // Remove comment markers from content for display
-        content = content.replace(commentRegex, '');
-        
-        // Convert markdown to HTML
-        this.editor.innerHTML = this.markdownToHtml(content);
-        
-        // Re-apply comment highlights
-        this.reapplyCommentHighlights();
-        this.updateCommentsPanel();
-        
-        // Process wiki links and tags after loading
-        this.processWikiLinks();
-        this.processTags();
-        this.updateBacklinksPanel();
     }
 
     reapplyCommentHighlights() {
@@ -625,7 +646,7 @@ class WordMarksEditor {
     }
     
     loadUserSettings() {
-        const saved = localStorage.getItem('wordmarks-settings');
+        const saved = localStorage.getItem('markiiup-settings');
         if (saved) {
             try {
                 return JSON.parse(saved);
@@ -640,7 +661,7 @@ class WordMarksEditor {
     }
 
     saveUserSettings() {
-        localStorage.setItem('wordmarks-settings', JSON.stringify(this.userSettings));
+        localStorage.setItem('markiiup-settings', JSON.stringify(this.userSettings));
     }
 
     openSettings() {
@@ -966,7 +987,7 @@ ${Object.keys(this.documentStore).map(key => `- ${key} (${this.documentStore[key
     }
 
     loadDocumentStore() {
-        const saved = localStorage.getItem('wordmarks-document-store');
+        const saved = localStorage.getItem('markiiup-document-store');
         if (saved) {
             try {
                 return JSON.parse(saved);
@@ -978,7 +999,7 @@ ${Object.keys(this.documentStore).map(key => `- ${key} (${this.documentStore[key
     }
 
     saveDocumentStore() {
-        localStorage.setItem('wordmarks-document-store', JSON.stringify(this.documentStore));
+        localStorage.setItem('markiiup-document-store', JSON.stringify(this.documentStore));
     }
 
     detectWorkingDirectory() {
@@ -1241,7 +1262,7 @@ let editor;
 
 // Initialize the editor when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    editor = new WordMarksEditor();
+    editor = new MarkiiupEditor();
     
     // DaisyUI modal handles click outside automatically via checkbox
     

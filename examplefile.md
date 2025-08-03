@@ -1,8 +1,8 @@
-# 📝 WordMarks Feature Showcase
+# 📝 markiiup Feature Showcase
 
 ## Overview
 
-This document demonstrates all the features available in **WordMarks** - a Microsoft Word-like editor that saves files in Markdown format. WordMarks provides a rich WYSIWYG editing experience while maintaining clean Markdown output.
+This document demonstrates all the features available in **markiiup** - a Microsoft Word-like editor that saves files in Markdown format. markiiup provides a rich WYSIWYG editing experience while maintaining clean Markdown output.
 
 ---
 
@@ -64,7 +64,7 @@ This document demonstrates all the features available in **WordMarks** - a Micro
 
 ## 💬 Comment System
 
-WordMarks includes a powerful task-based commenting system:
+markiiup includes a powerful task-based commenting system:
 
 - **Add Comments**: Select text and click `💬` button
 
@@ -82,7 +82,7 @@ WordMarks includes a powerful task-based commenting system:
 
 ## 🔗 Wiki Links
 
-WordMarks supports wiki-style document linking:
+markiiup supports wiki-style document linking:
 
 - **Syntax**: Use `[[Document Name]]` to create links
 
@@ -170,7 +170,7 @@ Current document stats: 0 words, 0 characters
 
 ## 🚀 Getting Started
 
-- **Open WordMarks**: Load `index.html` in any modern browser
+- **Open markiiup**: Load `index.html` in any modern browser
 
 - **Start Typing**: Begin writing in the WYSIWYG editor
 
@@ -188,7 +188,7 @@ Current document stats: 0 words, 0 characters
 
 ### Core Components
 
-- **WordMarksEditor Class**: Main application controller
+- **MarkiiupEditor Class**: Main application controller
 
 - **ContentEditable**: Rich text editing interface
 
@@ -244,7 +244,7 @@ Current document stats: 0 words, 0 characters
 
 ---
 
-*This document showcases all WordMarks features. Edit it in the WordMarks editor to see the rich formatting and interactive features in action!*
+*This document showcases all markiiup features. Edit it in the markiiup editor to see the rich formatting and interactive features in action!*
 
 <!-- COMMENTS -->
 <!-- COMMENT 1: {"text":"This is an example comment","selectedText":"Comment System","author":"User","timestamp":"8/1/2025, 9:39:02 PM","completed":false,"status":"open"} -->
