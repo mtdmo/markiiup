@@ -1,0 +1,261 @@
+/* Custom styles for markiiup with DaisyUI */
+
+/* Logo styling */
+.navbar img {
+    object-fit: contain;
+    border-radius: 4px;
+    max-height: 48px;
+    height: 48px;
+    width: auto;
+}
+
+/* Ensure proper scrolling behavior */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Main container scrolling */
+.flex-1.bg-base-50 {
+    max-height: calc(100vh - 120px); /* Account for navbar and status bar */
+}
+
+/* Editor content styling - maintains rich text formatting */
+.editor-content {
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000000;
+    outline: none;
+    cursor: text;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    height: auto !important;
+    min-height: 600px;
+}
+
+/* Editor typography - preserving original rich text styles */
+.editor-content h1 {
+    font-size: 24pt;
+    font-weight: bold;
+    margin: 24pt 0 12pt 0;
+    color: #000000;
+}
+
+.editor-content h2 {
+    font-size: 18pt;
+    font-weight: bold;
+    margin: 18pt 0 6pt 0;
+    color: #000000;
+}
+
+.editor-content h3 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 14pt 0 6pt 0;
+    color: #000000;
+}
+
+.editor-content h4 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 12pt 0 6pt 0;
+    color: #000000;
+}
+
+.editor-content h5 {
+    font-size: 10pt;
+    font-weight: bold;
+    margin: 10pt 0 6pt 0;
+    color: #000000;
+}
+
+.editor-content h6 {
+    font-size: 9pt;
+    font-weight: bold;
+    margin: 9pt 0 6pt 0;
+    color: #000000;
+}
+
+.editor-content p {
+    margin: 0 0 12pt 0;
+    text-align: left;
+}
+
+.editor-content ul, .editor-content ol {
+    margin: 12pt 0 12pt 24pt;
+    padding-left: 0;
+}
+
+.editor-content li {
+    margin: 6pt 0;
+}
+
+.editor-content a {
+    color: #106ebe;
+    text-decoration: underline;
+}
+
+.editor-content a:hover {
+    color: #005a9e;
+}
+
+.editor-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 12pt 0;
+    border: 1px solid #d1d1d1;
+}
+
+.editor-content strong, .editor-content b {
+    font-weight: bold;
+}
+
+.editor-content em, .editor-content i {
+    font-style: italic;
+}
+
+.editor-content u {
+    text-decoration: underline;
+}
+
+/* Table Styles */
+.editor-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12pt 0;
+    border: 1px solid #d1d1d1;
+}
+
+.editor-content th, .editor-content td {
+    border: 1px solid #d1d1d1;
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.editor-content th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #323130;
+}
+
+.editor-content tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.editor-content tr:hover {
+    background-color: #e8f4fd;
+}
+
+/* Custom comment highlight styles */
+.comment-highlight {
+    @apply bg-warning/20 px-1 py-0.5 rounded cursor-pointer transition-all duration-200;
+}
+
+.comment-highlight:hover {
+    @apply bg-warning/40;
+}
+
+.comment-highlight.completed {
+    @apply bg-success/20 line-through opacity-70;
+}
+
+.comment-highlight.active {
+    @apply bg-warning/60;
+}
+
+/* Custom wiki link styles */
+.wiki-link {
+    @apply text-primary no-underline bg-primary/10 px-1 py-0.5 rounded border border-primary/20 cursor-pointer transition-all duration-200;
+}
+
+.wiki-link:hover {
+    @apply bg-primary/20 border-primary/40;
+}
+
+.wiki-link.broken {
+    @apply text-error bg-error/10 border-error/20;
+}
+
+.wiki-link.broken:hover {
+    @apply bg-error/20 border-error/40;
+}
+
+/* Custom tag styles */
+.tag {
+    @apply badge badge-primary badge-outline text-xs cursor-pointer transition-all duration-200 hover:-translate-y-0.5;
+}
+
+.tag:before {
+    content: '#';
+    @apply opacity-70;
+}
+
+/* Comment item styling - handled in JavaScript with DaisyUI classes */
+
+/* Backlink item styling */
+.backlink-item {
+    @apply bg-base-100 border border-base-200 rounded p-2 cursor-pointer transition-all duration-200 text-sm hover:bg-base-200 hover:border-primary;
+}
+
+.backlink-title {
+    @apply font-medium text-base-content mb-1;
+}
+
+.backlink-context {
+    @apply text-base-content/60 text-xs italic;
+}
+
+.no-backlinks {
+    @apply text-base-content/60 italic text-xs;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 1024px) {
+    #comments-panel {
+        position: fixed;
+        top: 64px; /* Height of navbar */
+        right: 0;
+        bottom: 0;
+        z-index: 40;
+        width: 320px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+    }
+    
+    #comments-panel.show {
+        transform: translateX(0);
+    }
+    
+    .navbar-center {
+        display: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar, #comments-panel, .status-bar {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
+
+/* Focus styles for better accessibility */
+.editor:focus {
+    @apply ring-2 ring-primary/50 ring-offset-2;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading animation for async operations */
+.loading-spinner {
+    @apply animate-spin rounded-full h-4 w-4 border-b-2 border-primary;
+}

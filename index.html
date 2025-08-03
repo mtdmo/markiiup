@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="markiiup">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>markiiup - Word Editor to Markdown</title>
+    <link rel="icon" type="image/png" href="markiiup.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            plugins: [require('daisyui')],
+            daisyui: {
+                themes: [
+                    {
+                        markiiup: {
+                            "primary": "#2FAEAC",
+                            "primary-focus": "#259997", 
+                            "primary-content": "#ffffff",
+                            "secondary": "#46505C",
+                            "secondary-focus": "#3a434e",
+                            "secondary-content": "#ffffff",
+                            "accent": "#2FAEAC",
+                            "accent-focus": "#259997",
+                            "accent-content": "#ffffff",
+                            "neutral": "#f1f5f9",
+                            "neutral-focus": "#e2e8f0",
+                            "neutral-content": "#1e293b",
+                            "base-100": "#ffffff",
+                            "base-200": "#f8fafc",
+                            "base-300": "#e2e8f0",
+                            "base-content": "#1e293b",
+                            "info": "#2094f3",
+                            "success": "#009485",
+                            "warning": "#ff9900",
+                            "error": "#ff5724",
+                        },
+                        "markiiup-dark": {
+                            "primary": "#2FAEAC",
+                            "primary-focus": "#259997", 
+                            "primary-content": "#ffffff",
+                            "secondary": "#64748b",
+                            "secondary-focus": "#475569",
+                            "secondary-content": "#ffffff",
+                            "accent": "#2FAEAC",
+                            "accent-focus": "#259997",
+                            "accent-content": "#ffffff",
+                            "neutral": "#374151",
+                            "neutral-focus": "#4b5563",
+                            "neutral-content": "#f9fafb",
+                            "base-100": "#1f2937",
+                            "base-200": "#374151",
+                            "base-300": "#4b5563",
+                            "base-content": "#f9fafb",
+                            "info": "#3b82f6",
+                            "success": "#10b981",
+                            "warning": "#f59e0b",
+                            "error": "#ef4444",
+                        }
+                    },
+                    "light", "dark", "corporate"
+                ],
+                darkTheme: "dark",
+                base: true,
+                styled: true,
+                utils: true,
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="daisyui-custom.css">
+    <script>
+        // Force light mode immediately
+        localStorage.removeItem('markiiup-theme');
+        document.documentElement.setAttribute('data-theme', 'markiiup');
+    </script>
+    <style>
+        /* Force light theme override */
+        html[data-theme="markiiup"], body[data-theme="markiiup"] {
+            background-color: #f8fafc !important;
+            color: #1e293b !important;
+        }
+        
+        .navbar {
+            background-color: #e2e8f0 !important;
+            border-color: #cbd5e1 !important;
+        }
+        
+        .bg-base-100 {
+            background-color: #ffffff !important;
+        }
+        
+        .bg-base-200 {
+            background-color: #f1f5f9 !important;
+        }
+        
+        .bg-base-300 {
+            background-color: #e2e8f0 !important;
+        }
+        
+        .text-base-content {
+            color: #1e293b !important;
+        }
+        
+        .border-base-300 {
+            border-color: #cbd5e1 !important;
+        }
+        
+        .card {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+        }
+        
+        .min-h-screen {
+            background-color: #f8fafc !important;
+        }
+        
+        /* Status bar */
+        .bg-base-300.px-4.py-2 {
+            background-color: #e2e8f0 !important;
+        }
+        
+        /* Fix toolbar button styling */
+        .btn {
+            background-color: transparent !important;
+            border: 1px solid transparent !important;
+            color: #2FAEAC !important;
+        }
+        
+        .btn:hover {
+            background-color: rgba(47, 174, 172, 0.1) !important;
+            border-color: #2FAEAC !important;
+            color: #259997 !important;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem !important;
+        }
+        
+        /* Material Icons styling */
+        .btn .material-icons {
+            color: #2FAEAC !important;
+            font-size: 40px !important;
+            line-height: 1 !important;
+        }
+        
+        .btn:hover .material-icons {
+            color: #259997 !important;
+        }
+        
+        /* Menu dropdown icon styling */
+        .menu .material-icons {
+            color: #1e293b !important;
+            font-size: 36px !important;
+            margin-right: 8px !important;
+        }
+        
+        .menu li a:hover .material-icons {
+            color: #2FAEAC !important;
+        }
+        
+        /* Join button group styling */
+        .join .btn {
+            border-radius: 0 !important;
+        }
+        
+        .join .btn:first-child {
+            border-top-left-radius: 0.5rem !important;
+            border-bottom-left-radius: 0.5rem !important;
+        }
+        
+        .join .btn:last-child {
+            border-top-right-radius: 0.5rem !important;
+            border-bottom-right-radius: 0.5rem !important;
+        }
+        
+        /* Dropdown styling */
+        .dropdown-content {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        
+        .menu li a {
+            color: #1e293b !important;
+        }
+        
+        .menu li a:hover {
+            background-color: rgba(47, 174, 172, 0.1) !important;
+            color: #2FAEAC !important;
+        }
+    </style>
+</head>
+<body data-theme="markiiup" class="min-h-screen bg-base-100">
+    <div class="min-h-screen flex flex-col bg-base-100">
+        <!-- Modern Toolbar -->
+        <div class="navbar bg-base-200 shadow-lg border-b border-base-300">
+            <div class="navbar-start">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+                        <span class="material-icons">menu</span>
+                    </div>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a id="new-btn">
+                            <span class="material-icons">note_add</span>
+                            New Document
+                        </a></li>
+                        <li><a id="open-btn">
+                            <span class="material-icons">folder_open</span>
+                            Open Document
+                        </a></li>
+                        <li><a id="save-btn">
+                            <span class="material-icons">save</span>
+                            Save as Markdown
+                        </a></li>
+                    </ul>
+                </div>
+                <div class="ml-2">
+                    <img src="markiiup.png" alt="markiiup" class="h-12 w-auto">
+                </div>
+            </div>
+            
+            <div class="navbar-center">
+                <div class="join">
+                    <!-- Text Formatting -->
+                    <button id="bold-btn" class="btn btn-sm join-item" title="Bold">
+                        <span class="material-icons">format_bold</span>
+                    </button>
+                    <button id="italic-btn" class="btn btn-sm join-item" title="Italic">
+                        <span class="material-icons">format_italic</span>
+                    </button>
+                    <button id="underline-btn" class="btn btn-sm join-item" title="Underline">
+                        <span class="material-icons">format_underlined</span>
+                    </button>
+                </div>
+                
+                <div class="divider divider-horizontal"></div>
+                
+                <!-- Heading Select -->
+                <select id="heading-select" class="select select-bordered w-36 h-10">
+                    <option value="">Normal</option>
+                    <option value="h1">Heading 1</option>
+                    <option value="h2">Heading 2</option>
+                    <option value="h3">Heading 3</option>
+                    <option value="h4">Heading 4</option>
+                    <option value="h5">Heading 5</option>
+                    <option value="h6">Heading 6</option>
+                </select>
+                
+                <div class="divider divider-horizontal"></div>
+                
+                <!-- List Controls -->
+                <div class="join">
+                    <button id="bullet-list-btn" class="btn btn-sm join-item" title="Bullet List">
+                        <span class="material-icons">format_list_bulleted</span>
+                    </button>
+                    <button id="number-list-btn" class="btn btn-sm join-item" title="Numbered List">
+                        <span class="material-icons">format_list_numbered</span>
+                    </button>
+                </div>
+                
+                <div class="divider divider-horizontal"></div>
+                
+                <!-- Insert Tools -->
+                <div class="join">
+                    <button id="link-btn" class="btn btn-sm join-item" title="Insert Link">
+                        <span class="material-icons">link</span>
+                    </button>
+                    <button id="image-btn" class="btn btn-sm join-item" title="Insert Image">
+                        <span class="material-icons">image</span>
+                    </button>
+                    <button id="table-btn" class="btn btn-sm join-item" title="Insert Table">
+                        <span class="material-icons">table_chart</span>
+                    </button>
+                    <button id="comment-btn" class="btn btn-sm join-item" title="Add Comment">
+                        <span class="material-icons">comment</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="navbar-end">
+                <div class="join">
+                    <button id="toggle-comments-btn" class="btn btn-sm join-item" title="Toggle Comments Panel">
+                        <span class="material-icons">side_navigation</span>
+                    </button>
+                    <button id="settings-btn" class="btn btn-sm join-item" title="Settings">
+                        <span class="material-icons">settings</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Modal -->
+        <input type="checkbox" id="settings-modal" class="modal-toggle" />
+        <div class="modal" role="dialog">
+            <div class="modal-box w-11/12 max-w-2xl">
+                <form method="dialog">
+                    <label for="settings-modal" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="close-settings-btn">✕</label>
+                </form>
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"></path></svg>
+                    Settings
+                </h3>
+                
+                <div class="space-y-6">
+                    <div class="form-control">
+                        <label class="label" for="user-name">
+                            <span class="label-text font-semibold">Your Name</span>
+                        </label>
+                        <input type="text" id="user-name" placeholder="Enter your name for comments" class="input input-bordered w-full" />
+                    </div>
+                    
+                    <div class="form-control">
+                        <label class="label" for="user-email">
+                            <span class="label-text font-semibold">Email (optional)</span>
+                        </label>
+                        <input type="email" id="user-email" placeholder="your.email@example.com" class="input input-bordered w-full" />
+                    </div>
+                    
+                    <div class="divider">Debug Options</div>
+                    
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Development Tools</span>
+                        </label>
+                        <div class="flex gap-2">
+                            <button type="button" id="debug-store-btn" class="btn btn-outline btn-info btn-sm">Show Document Store</button>
+                            <button type="button" id="clear-store-btn" class="btn btn-outline btn-error btn-sm">Clear Store</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-action">
+                    <label for="settings-modal" class="btn btn-outline">Cancel</label>
+                    <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="flex-1 flex">
+            <!-- Editor Section -->
+            <div class="flex-1 bg-base-50 flex justify-center p-4 overflow-y-auto">
+                <div class="w-full max-w-4xl">
+                    <div class="card bg-base-100 shadow-xl border border-base-300">
+                        <div class="card-body p-8 lg:p-12">
+                            <div id="editor" contenteditable="true" class="editor-content max-w-none min-h-[600px] focus:outline-none" style="font-family: 'Times New Roman', serif; font-size: 12pt; line-height: 1.5; color: #000000; outline: none; cursor: text; word-wrap: break-word; height: auto;">
+                                <p>Start typing your document here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Comments Panel -->
+            <div id="comments-panel" class="w-80 bg-base-200 border-l border-base-300 flex-col overflow-hidden" style="display: none;">
+                <!-- Backlinks Section -->
+                <div class="collapse collapse-arrow bg-base-100 mb-2" id="backlinks-section">
+                    <input type="checkbox" checked /> 
+                    <div class="collapse-title text-sm font-bold text-primary">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+                            Backlinks
+                        </div>
+                    </div>
+                    <div class="collapse-content">
+                        <div class="space-y-2" id="backlinks-list">
+                            <!-- Backlinks will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tags Section -->
+                <div class="collapse collapse-arrow bg-base-100 mb-2" id="tags-section">
+                    <input type="checkbox" checked /> 
+                    <div class="collapse-title text-sm font-bold text-secondary">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 6h.008v.008H6V6Z" /></svg>
+                            Tags
+                        </div>
+                    </div>
+                    <div class="collapse-content">
+                        <div class="flex flex-wrap gap-1" id="tags-cloud">
+                            <!-- Tags will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Comments Section -->
+                <div class="flex-1 bg-base-100 flex flex-col">
+                    <div class="p-4 border-b border-base-300">
+                        <div class="flex items-center gap-2 text-sm font-bold text-accent">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" /></svg>
+                            Comments
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-3" id="comments-list">
+                        <!-- Comments will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="bg-base-300 px-4 py-2 border-t border-base-300">
+            <div class="flex justify-between items-center text-sm text-base-content">
+                <div class="flex items-center gap-4">
+                    <div class="badge badge-outline gap-1">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span id="word-count">0 words</span>
+                    </div>
+                    <div class="badge badge-outline gap-1">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
+                        <span id="char-count">0 characters</span>
+                    </div>
+                </div>
+                <div class="text-xs opacity-70">
+                    Made with ♥️ using markiiup
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <input type="file" id="file-input" accept=".md,.txt" class="hidden">
+    
+    <script src="script.js"></script>
+</body>
+</html>
