@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script>
         tailwind.config = {
-            plugins: [require('daisyui')],
             daisyui: {
                 themes: [
                     {
@@ -143,6 +142,7 @@
             padding-top: 0.5rem !important;
             padding-bottom: 0.5rem !important;
         }
+        
         
         /* Material Icons styling */
         .btn .material-icons {
@@ -297,6 +297,25 @@
             background-color: #cbd5e1 !important;
         }
         
+        /* Expanded editor mode */
+        .editor-expanded .max-w-4xl {
+            max-width: 90% !important;
+        }
+        
+        .editor-expanded #comments-panel {
+            display: none !important;
+        }
+        
+        .editor-expanded .card-body {
+            padding: 3rem 4rem !important;
+        }
+        
+        @media (min-width: 1024px) {
+            .editor-expanded .card-body {
+                padding: 4rem 6rem !important;
+            }
+        }
+        
     </style>
 </head>
 <body data-theme="markiiup" class="min-h-screen bg-base-100">
@@ -377,19 +396,42 @@
                     <button id="image-btn" class="btn btn-sm join-item">
                         <span class="material-icons">image</span>
                     </button>
-                    <button id="table-btn" class="btn btn-sm join-item">
-                        <span class="material-icons">table_chart</span>
-                    </button>
+                    <div class="dropdown dropdown-bottom">
+                        <button id="table-btn" class="btn btn-sm join-item">
+                            <span class="material-icons">table_chart</span>
+                        </button>
+                        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                            <li><a id="new-table">New Table</a></li>
+                            <li class="table-actions hidden"><hr class="my-2 border-base-300"></li>
+                            <li class="table-actions hidden"><a id="add-row-above">Add Row Above</a></li>
+                            <li class="table-actions hidden"><a id="add-row-below">Add Row Below</a></li>
+                            <li class="table-actions hidden"><a id="add-col-left">Add Column Left</a></li>
+                            <li class="table-actions hidden"><a id="add-col-right">Add Column Right</a></li>
+                            <li class="table-actions hidden"><hr class="my-2 border-base-300"></li>
+                            <li class="table-actions hidden"><a id="delete-row">Delete Row</a></li>
+                            <li class="table-actions hidden"><a id="delete-col">Delete Column</a></li>
+                        </ul>
+                    </div>
                     <button id="comment-btn" class="btn btn-sm join-item">
                         <span class="material-icons">comment</span>
                     </button>
                 </div>
+                
+                <div class="divider divider-horizontal"></div>
+                
+                <!-- View Controls -->
+                <button id="expand-btn" class="btn btn-sm">
+                    <span class="material-icons">open_in_full</span>
+                </button>
             </div>
             
             <div class="navbar-end">
                 <div class="join">
                     <button id="toggle-comments-btn" class="btn btn-sm join-item">
                         <span class="material-icons">side_navigation</span>
+                    </button>
+                    <button id="help-btn" class="btn btn-sm join-item" title="Help & Issues">
+                        <span class="material-icons">help</span>
                     </button>
                     <button id="settings-btn" class="btn btn-sm join-item">
                         <span class="material-icons">settings</span>
@@ -520,13 +562,14 @@
                     </div>
                 </div>
                 <div class="text-xs opacity-70">
-                    Made with ♥️ from North Carolina, USA
+                    Made with ♥️ from North Carolina, USA • markiiup v1.1
                 </div>
             </div>
         </div>
     </div>
     
     <input type="file" id="file-input" accept=".md,.txt" class="hidden">
+    
     
     <script src="script.js"></script>
 </body>

@@ -52,13 +52,13 @@ This document demonstrates all the features available in **markiiup** - a Micros
 ---
 
 📊 Table Example
-| Feature | Description | Status |
-| --- | --- | --- |
-| Rich Text Editing | WYSIWYG interface | ✅ Active |
-| Markdown Export | Clean MD output | ✅ Active |
-| Comments System | Task-based commenting | ✅ Active |
-| Wiki Links | Document linking | ✅ Active |
-| Settings | User preferences | ✅ Active |
+| Feature | Description | Status | Extra |
+| --- | --- | --- | --- | --- |
+| Rich Text Editing Process flow | WYSIWYG interface | ✅ Active | 🅾️ Not Active |
+| Markdown Export functionality | Clean MD output | ✅ Active | 🅾️ Not Active |
+| Comments System to add tasks to the document for tracking and collaboration with other team members | Task-based commenting | ✅ Active | 🅾️ Not Active |
+| Wiki Links | Document linking | ✅ Active | 🅾️ Not Active |
+| Settings | User preferences | ✅ Active | 🅾️ Not Active | 
 
 ---
 

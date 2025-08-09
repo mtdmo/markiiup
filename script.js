@@ -10,6 +10,8 @@ class MarkiiupEditor {
         this.documentTags = new Set(); // Track tags in document
         this.documentStore = this.loadDocumentStore(); // Simulate document database
         this.workingDirectory = this.detectWorkingDirectory(); // Track current working directory
+        this.isExpanded = false; // Track expanded state
+        this.activeTableCell = null; // Track the active table cell for context menu
         this.initializeEventListeners();
         this.loadTheme();
         this.updateStats();
@@ -39,13 +41,23 @@ class MarkiiupEditor {
         // Link, image, table, and comment buttons
         document.getElementById('link-btn').addEventListener('click', () => this.insertLink());
         document.getElementById('image-btn').addEventListener('click', () => this.insertImage());
-        document.getElementById('table-btn').addEventListener('click', () => this.insertTable());
+        // Table dropdown menu items
+        document.getElementById('new-table').addEventListener('click', () => this.insertTable());
+        document.getElementById('add-row-above').addEventListener('click', () => this.addTableRow('above'));
+        document.getElementById('add-row-below').addEventListener('click', () => this.addTableRow('below'));
+        document.getElementById('add-col-left').addEventListener('click', () => this.addTableColumn('left'));
+        document.getElementById('add-col-right').addEventListener('click', () => this.addTableColumn('right'));
+        document.getElementById('delete-row').addEventListener('click', () => this.deleteTableRow());
+        document.getElementById('delete-col').addEventListener('click', () => this.deleteTableColumn());
+        
         document.getElementById('comment-btn').addEventListener('click', () => this.addComment());
         document.getElementById('toggle-comments-btn').addEventListener('click', () => this.toggleCommentsPanel());
+        document.getElementById('help-btn').addEventListener('click', () => this.openHelp());
         document.getElementById('settings-btn').addEventListener('click', () => this.openSettings());
         document.getElementById('save-settings-btn').addEventListener('click', () => this.saveSettings());
         document.getElementById('debug-store-btn').addEventListener('click', () => this.showDebugInfo());
         document.getElementById('clear-store-btn').addEventListener('click', () => this.clearDocumentStore());
+        document.getElementById('expand-btn').addEventListener('click', () => this.toggleExpandedView());
         
         // File input
         document.getElementById('file-input').addEventListener('change', (e) => this.handleFileLoad(e));
@@ -59,6 +71,7 @@ class MarkiiupEditor {
         });
         this.editor.addEventListener('paste', (e) => this.handlePaste(e));
         this.editor.addEventListener('mouseup', () => this.handleSelection());
+        this.editor.addEventListener('click', (e) => this.handleTableSelection(e));
         
         // Prevent default drag and drop
         this.editor.addEventListener('dragover', (e) => e.preventDefault());
@@ -290,6 +303,50 @@ class MarkiiupEditor {
         const panel = document.getElementById('comments-panel');
         this.commentsVisible = !this.commentsVisible;
         panel.style.display = this.commentsVisible ? 'flex' : 'none';
+    }
+
+    toggleExpandedView() {
+        this.isExpanded = !this.isExpanded;
+        const editorContainer = document.querySelector('.flex-1.flex');
+        const expandBtn = document.getElementById('expand-btn');
+        const expandIcon = expandBtn.querySelector('.material-icons');
+        
+        if (this.isExpanded) {
+            editorContainer.classList.add('editor-expanded');
+            expandIcon.textContent = 'close_fullscreen';
+            // Hide comments panel when expanded
+            if (this.commentsVisible) {
+                this.toggleCommentsPanel();
+            }
+        } else {
+            editorContainer.classList.remove('editor-expanded');
+            expandIcon.textContent = 'open_in_full';
+        }
+        
+        // Focus back on editor
+        this.editor.focus();
+    }
+
+    handleTableSelection(e) {
+        const cell = e.target.closest('td, th');
+        if (cell) {
+            this.activeTableCell = cell;
+            this.updateTableDropdown(true);
+        } else {
+            this.activeTableCell = null;
+            this.updateTableDropdown(false);
+        }
+    }
+
+    updateTableDropdown(showActions) {
+        const tableActions = document.querySelectorAll('.table-actions');
+        tableActions.forEach(action => {
+            if (showActions) {
+                action.classList.remove('hidden');
+            } else {
+                action.classList.add('hidden');
+            }
+        });
     }
 
     handlePaste(e) {
@@ -664,6 +721,11 @@ class MarkiiupEditor {
         localStorage.setItem('markiiup-settings', JSON.stringify(this.userSettings));
     }
 
+    openHelp() {
+        // Open GitHub issues page in a new tab
+        window.open('https://github.com/mtdmo/markiiup/issues/new', '_blank');
+    }
+
     openSettings() {
         const modal = document.getElementById('settings-modal');
         const nameInput = document.getElementById('user-name');
@@ -1010,6 +1072,80 @@ ${Object.keys(this.documentStore).map(key => `- ${key} (${this.documentStore[key
         // Remove the HTML file from the path to get directory
         pathParts.pop();
         return pathParts.join('/') || '/';
+    }
+
+
+    addTableRow(position) {
+        if (!this.activeTableCell) return;
+        
+        const row = this.activeTableCell.parentElement;
+        const table = row.closest('table');
+        const newRow = document.createElement('tr');
+        const cellCount = row.children.length;
+        
+        // Create cells for new row
+        for (let i = 0; i < cellCount; i++) {
+            const cell = document.createElement('td'); // Always create td for new rows
+            cell.textContent = 'New cell';
+            newRow.appendChild(cell);
+        }
+        
+        if (position === 'above') {
+            row.parentElement.insertBefore(newRow, row);
+        } else {
+            row.parentElement.insertBefore(newRow, row.nextSibling);
+        }
+        
+        document.getElementById('table-menu-button').style.display = 'none';
+    }
+
+    deleteTableRow() {
+        if (!this.activeTableCell) return;
+        
+        const row = this.activeTableCell.parentElement;
+        const table = row.closest('table');
+        
+        // Don't delete if it's the only row
+        if (table.querySelectorAll('tr').length > 1) {
+            row.remove();
+        }
+        
+    }
+
+    addTableColumn(position) {
+        if (!this.activeTableCell) return;
+        
+        const cellIndex = Array.from(this.activeTableCell.parentElement.children).indexOf(this.activeTableCell);
+        const table = this.activeTableCell.closest('table');
+        const rows = table.querySelectorAll('tr');
+        
+        rows.forEach((row, rowIndex) => {
+            const newCell = document.createElement(rowIndex === 0 ? 'th' : 'td');
+            newCell.textContent = 'New cell';
+            
+            if (position === 'left') {
+                row.insertBefore(newCell, row.children[cellIndex]);
+            } else {
+                row.insertBefore(newCell, row.children[cellIndex + 1]);
+            }
+        });
+        
+    }
+
+    deleteTableColumn() {
+        if (!this.activeTableCell) return;
+        
+        const cellIndex = Array.from(this.activeTableCell.parentElement.children).indexOf(this.activeTableCell);
+        const table = this.activeTableCell.closest('table');
+        const rows = table.querySelectorAll('tr');
+        
+        // Don't delete if it's the only column
+        if (rows[0].children.length > 1) {
+            rows.forEach(row => {
+                row.children[cellIndex].remove();
+            });
+        }
+        
     }
 
     normalizeDocumentName(name) {
