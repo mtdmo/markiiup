@@ -1,8 +1,10 @@
-# 📝 markiiup Feature Showcase
+# 📝 markiiup v1.1 Feature Showcase
 
 ## Overview
 
-This document demonstrates all the features available in **markiiup** - a Microsoft Word-like editor that saves files in Markdown format. markiiup provides a rich WYSIWYG editing experience while maintaining clean Markdown output.
+This document demonstrates all the features available in **markiiup v1.1** - a modern Microsoft Word-like editor that saves files in Markdown format. markiiup provides a rich WYSIWYG editing experience with distraction-free modes, advanced table editing, and integrated help system while maintaining clean Markdown output.
+
+> **New in v1.1**: Expanded writing view, improved table operations, and integrated GitHub support!
 
 ---
 
@@ -47,18 +49,35 @@ This document demonstrates all the features available in **markiiup** - a Micros
 
 - **Images**: Use `🖼️` button to embed images
 
-- **Tables**: Use `📊` button to create structured data tables
+- **Advanced Tables**: Use `📊` button dropdown for comprehensive table operations
+
+### 🎯 New v1.1 Features
+
+- **Expanded View**: Click `⛶` button for distraction-free writing with wider editor space
+
+- **Smart Table Operations**: Click any table cell, then use table dropdown for intuitive editing
+
+- **Integrated Help**: Click `❓` button for direct access to GitHub issues and support
 
 ---
 
-📊 Table Example
-| Feature | Description | Status | Extra |
+📊 Enhanced Table Example (v1.1)
+
+**How to edit this table:**
+1. Click any cell below
+2. Click the table button (📊) in toolbar  
+3. Choose your operation from the dropdown
+
+| Feature | Description | Status | Version | Notes |
 | --- | --- | --- | --- | --- |
-| Rich Text Editing Process flow | WYSIWYG interface | ✅ Active | 🅾️ Not Active |
-| Markdown Export functionality | Clean MD output | ✅ Active | 🅾️ Not Active |
-| Comments System to add tasks to the document for tracking and collaboration with other team members | Task-based commenting | ✅ Active | 🅾️ Not Active |
-| Wiki Links | Document linking | ✅ Active | 🅾️ Not Active |
-| Settings | User preferences | ✅ Active | 🅾️ Not Active | 
+| Rich Text Editing | WYSIWYG interface | ✅ Active | v1.0 | Core functionality |
+| Markdown Export | Clean MD output | ✅ Active | v1.0 | Bidirectional conversion |
+| Task Comments | Collaborative commenting | ✅ Active | v1.0 | Open/close states |
+| Wiki Links | Document linking `[[name]]` | ✅ Active | v1.0 | Auto-detection |
+| Tag System | `#hashtag` categorization | ✅ Active | v1.0 | Real-time processing |
+| **Expanded View** | **Distraction-free writing** | **✅ Active** | **v1.1** | **NEW: Wider editor** |
+| **Smart Tables** | **Toolbar-based operations** | **✅ Active** | **v1.1** | **NEW: Add/delete rows/cols** |
+| **Help Integration** | **GitHub issues access** | **✅ Active** | **v1.1** | **NEW: Direct support** | 
 
 ---
 
@@ -95,9 +114,20 @@ markiiup supports wiki-style document linking:
   - Existing documents: Normal link styling
   - Missing documents: "Broken" link styling
 
-Example links: [[Document Name]], [[Project Overview]], [[Technical Specs]]
+Example links: [[Document Name]], [[User Guide]], [[Technical Specs]]
 
 This document specifically references [[Document Name]] to test the backlink functionality.
+
+### 🏷️ Tag System
+
+markiiup supports hashtag-based categorization:
+
+- **Auto-detection**: Tags like #documentation #features #demo are automatically styled
+- **Real-time Processing**: Tags are processed as you type
+- **Visual Pills**: Tags appear as colored badges in both editor and sidebar
+- **Organization**: Use tags to categorize and organize your documents
+
+Try these tags: #markiiup #wysiwyg #markdown #v1.1 #showcase
 
 ---
 
@@ -210,41 +240,68 @@ Current document stats: 0 words, 0 characters
 
 ---
 
-## 📋 Feature Checklist
+## 📋 Complete Feature Checklist
 
+### Core Features (v1.0)
 - [x] Rich text editing (bold, italic, underline)
-
 - [x] Heading formatting (H1-H6)
-
 - [x] Bullet and numbered lists
-
 - [x] Hyperlink insertion
-
 - [x] Image embedding
-
 - [x] Table creation and editing
-
 - [x] Comment system with task management
-
-- [x] Wiki-style document linking
-
+- [x] Wiki-style document linking with `[[Document Name]]`
+- [x] Hashtag tagging with `#tag` syntax
 - [x] Settings and user preferences
-
 - [x] Real-time word/character counting
-
 - [x] File operations (new, open, save)
-
 - [x] Bidirectional HTML ↔ Markdown conversion
-
 - [x] Comment persistence in saved files
-
 - [x] Microsoft Word-like interface
-
 - [x] No build process required (pure HTML/CSS/JS)
+- [x] Cross-document backlink tracking
+- [x] Modern UI with DaisyUI + Material Icons
+
+### New Features (v1.1)
+- [x] **Expanded View**: Distraction-free writing mode
+- [x] **Smart Table Operations**: Toolbar-based table editing
+  - [x] Add row above/below
+  - [x] Add column left/right  
+  - [x] Delete rows and columns
+  - [x] Intuitive click-to-select workflow
+- [x] **Help Integration**: Direct GitHub issues access
+- [x] **Enhanced UI**: Improved button positioning and accessibility
+- [x] **Version Display**: Version shown in status bar
 
 ---
 
-*This document showcases all markiiup features. Edit it in the markiiup editor to see the rich formatting and interactive features in action!*
+## 🚀 Quick Start Guide
+
+### Getting Started with markiiup v1.1:
+
+1. **Basic Writing**: Start typing in the main editor area
+2. **Format Text**: Use toolbar buttons for bold, italic, underline, headings
+3. **Try Expanded View**: Click the `⛶` button for distraction-free writing
+4. **Add Comments**: Select text and click `💬` to add task-based comments
+5. **Create Links**: Type `[[Document Name]]` for wiki-style links
+6. **Add Tags**: Use `#hashtag` syntax for categorization
+7. **Work with Tables**: 
+   - Click table button dropdown → "New Table"
+   - Click any cell, then table dropdown for editing options
+8. **Get Help**: Click `❓` button to report issues or request features
+9. **Save Work**: Click save button to export as clean Markdown
+
+### Testing Instructions:
+
+- **Table Editing**: Try adding/removing rows and columns from the table above
+- **Expanded Mode**: Toggle the expanded view to see the difference
+- **Comments**: Select this text and add a comment to test the system
+- **Links**: Click [[Document Name]] to test cross-document navigation
+- **Tags**: Notice how #testing #demo #tutorial appear as styled pills
+
+---
+
+*This document showcases all markiiup v1.1 features. Edit it in the markiiup editor to experience the rich formatting and interactive features!*
 
 <!-- COMMENTS -->
 <!-- COMMENT 1: {"text":"This is an example comment","selectedText":"Comment System","author":"User","timestamp":"8/1/2025, 9:39:02 PM","completed":false,"status":"open"} -->

@@ -4,7 +4,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/issues)
 [![GitHub stars](https://img.shields.io/github/stars/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/stargazers)
 
-A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format.
+A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format. Features an intuitive interface with distraction-free writing modes, advanced table editing, and integrated help system.
 
 ![markiiup Logo](markiiup.png)
 
@@ -18,8 +18,9 @@ A modern JavaScript word processor that provides a Microsoft Word-like editing e
 - **Familiar Interface**: Microsoft Word-like toolbar and editing experience
 - **Text Formatting**: Bold, italic, underline, headings (H1-H6)
 - **Lists**: Bullet and numbered lists
-- **Tables**: Full table support with Markdown conversion
+- **Advanced Tables**: Full table support with intuitive editing operations
 - **Links & Images**: Easy insertion with toolbar buttons
+- **Expanded View**: Distraction-free writing mode with wider editor space
 
 ### 💬 Task-Based Comments
 - Add comments to any selected text
@@ -49,12 +50,19 @@ A modern JavaScript word processor that provides a Microsoft Word-like editing e
 - Light theme optimized for readability
 - Responsive design for mobile and desktop
 - Teal brand color (#2FAEAC) throughout
+- **Integrated Help**: Direct access to GitHub issues for support and feedback
+
+### 🛠️ Advanced Table Operations
+- **Smart Table Editing**: Click any table cell, then use toolbar dropdown for operations
+- **Row Management**: Add rows above/below, delete rows
+- **Column Management**: Add columns left/right, delete columns
+- **Intuitive Workflow**: No complex hover menus or context menus needed
 
 ## Getting Started
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/markiiup.git
+git clone https://github.com/mtdmo/markiiup.git
 cd markiiup
 ```
 
@@ -86,6 +94,19 @@ cd markiiup
 - View all tags in the sidebar
 - Click tags to filter/search (future feature)
 
+### Tables
+1. Click the table button dropdown in toolbar
+2. Select "New Table" to create a table
+3. To edit existing table:
+   - Click any cell in the table
+   - Click table button dropdown again
+   - Choose your operation (add/delete rows/columns)
+
+### Expanded View
+- Click the expand button (⛶) in toolbar
+- Enjoy distraction-free writing with wider editor space
+- Click again to return to normal view
+
 ## Technical Details
 
 ### Stack
@@ -104,11 +125,14 @@ cd markiiup
 ```
 markiiup/
 ├── index.html          # Main application file
-├── script.js           # Core JavaScript logic
-├── styles.css          # Legacy styles
+├── script.js           # Core JavaScript logic (MarkiiupEditor class)
+├── styles.css          # Legacy styles (being phased out)
 ├── daisyui-custom.css  # Custom DaisyUI components
+├── tailwind-styles.css # Tailwind utility classes
 ├── markiiup.png        # Application logo
-└── CLAUDE.md          # AI assistant instructions
+├── CLAUDE.md          # AI assistant instructions
+├── examplefile.md     # Feature showcase document
+└── Document Name.md   # Test document for backlinks
 ```
 
 ## Browser Support
@@ -121,7 +145,22 @@ markiiup/
 
 ## Contributing
 
-Feel free to submit issues and enhancement requests!
+We welcome contributions! Here's how you can help:
+
+1. **Report Issues**: Click the help button (❓) in the app or visit [GitHub Issues](https://github.com/mtdmo/markiiup/issues)
+2. **Feature Requests**: Share your ideas for new features
+3. **Bug Reports**: Help us fix problems you encounter
+4. **Code Contributions**: Fork, improve, and submit pull requests
+
+## Roadmap
+
+### Upcoming Features
+- Enhanced document navigation UI
+- Advanced file path handling
+- Performance optimizations for larger documents
+- Export options (PDF, DOCX)
+- Plugin system for extensibility
+- Cloud integration for document storage
 
 ## License
 
@@ -133,6 +172,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - UI components from [DaisyUI](https://daisyui.com/)
 - Icons from [Material Design Icons](https://fonts.google.com/icons)
 
+## Version History
+
+- **v1.1** (Current) - Enhanced UI with expanded view, improved table operations, integrated help system
+- **v1.0** - Initial release with core WYSIWYG editing, comments, wiki links, tags, and modern UI
+
 ---
 
-Made with ❤️ from North Carolina, USA
+Made with ❤️ from North Carolina, USA • markiiup v1.1
