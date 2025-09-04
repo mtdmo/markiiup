@@ -1,10 +1,11 @@
-# markiiup
+# markiiup v1.2
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/issues)
 [![GitHub stars](https://img.shields.io/github/stars/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/stargazers)
+[![Version](https://img.shields.io/badge/version-1.2-blue)](https://github.com/mtdmo/markiiup/releases)
 
-A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format. Features an intuitive interface with distraction-free writing modes, advanced table editing, and integrated help system.
+A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format. Now with font management, enhanced file handling, and improved save functionality.
 
 ![markiiup Logo](markiiup.png)
 
@@ -17,6 +18,8 @@ A modern JavaScript word processor that provides a Microsoft Word-like editing e
 ### 📝 Rich Text Editing
 - **Familiar Interface**: Microsoft Word-like toolbar and editing experience
 - **Text Formatting**: Bold, italic, underline, headings (H1-H6)
+- **Font Management**: Choose from multiple font families (Arial, Times New Roman, Georgia, Courier, Verdana, and more)
+- **Font Sizing**: Adjustable font sizes from 8pt to 36pt
 - **Lists**: Bullet and numbered lists
 - **Advanced Tables**: Full table support with intuitive editing operations
 - **Links & Images**: Easy insertion with toolbar buttons
@@ -52,6 +55,12 @@ A modern JavaScript word processor that provides a Microsoft Word-like editing e
 - Teal brand color (#2FAEAC) throughout
 - **Integrated Help**: Direct access to GitHub issues for support and feedback
 
+### 💾 Enhanced File Management (v1.2)
+- **Smart Save**: Automatically saves back to original file location when supported
+- **Save As Dialog**: Proper file system dialog for choosing save location (Chrome/Edge)
+- **File System Access API**: Modern file handling for supported browsers
+- **Fallback Support**: Automatic download for browsers without File System Access API
+
 ### 🛠️ Advanced Table Operations
 - **Smart Table Editing**: Click any table cell, then use toolbar dropdown for operations
 - **Row Management**: Add rows above/below, delete rows
@@ -76,7 +85,14 @@ cd markiiup
 ### Basic Editing
 - Start typing in the editor area
 - Use the toolbar buttons for formatting
+- Choose fonts and sizes from the dropdowns
 - Save your work as a `.md` file
+
+### File Operations (v1.2)
+- **Open**: Use File menu or Ctrl/Cmd+O to open files
+- **Save**: Saves to original location if opened with File System Access API
+- **Save As**: Choose a new location and filename (Chrome/Edge/Opera)
+- **Auto-fallback**: Downloads file if browser doesn't support modern APIs
 
 ### Comments/Tasks
 1. Select any text
@@ -93,6 +109,11 @@ cd markiiup
 - Add tags anywhere with `#tagname`
 - View all tags in the sidebar
 - Click tags to filter/search (future feature)
+
+### Font Management
+- Select text and choose a font family from the dropdown
+- Adjust font size for selected text or new content
+- Fonts are preserved when converting between HTML and Markdown
 
 ### Tables
 1. Click the table button dropdown in toolbar
@@ -137,10 +158,14 @@ markiiup/
 
 ## Browser Support
 
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
+### Full Feature Support (v1.2)
+- **Chrome 86+** (recommended) - Full File System Access API support
+- **Edge 86+** - Full File System Access API support
+- **Opera 72+** - Full File System Access API support
+
+### Basic Support
+- Firefox - All features except native file save dialog
+- Safari - All features except native file save dialog
 - Any modern browser with ES6+ support
 
 ## Contributing
@@ -156,11 +181,12 @@ We welcome contributions! Here's how you can help:
 
 ### Upcoming Features
 - Enhanced document navigation UI
-- Advanced file path handling
 - Performance optimizations for larger documents
 - Export options (PDF, DOCX)
 - Plugin system for extensibility
 - Cloud integration for document storage
+- Advanced formatting options (text colors, highlighting)
+- Real-time collaboration
 
 ## License
 
@@ -174,9 +200,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Version History
 
-- **v1.1** (Current) - Enhanced UI with expanded view, improved table operations, integrated help system
+- **v1.2** (Current - September 2025) - Font management (family & size), enhanced file handling with File System Access API, proper Save As dialog
+- **v1.1** - Enhanced UI with expanded view, improved table operations, integrated help system
 - **v1.0** - Initial release with core WYSIWYG editing, comments, wiki links, tags, and modern UI
 
 ---
 
-Made with ❤️ from North Carolina, USA • markiiup v1.1
+Made with ❤️ from North Carolina, USA • markiiup v1.2

@@ -2,6 +2,8 @@ class MarkiiupEditor {
     constructor() {
         this.editor = document.getElementById('editor');
         this.currentFileName = 'untitled.md';
+        this.currentFilePath = null; // Track the full file path for save-in-place
+        this.currentFileHandle = null; // For File System Access API if available
         this.comments = [];
         this.commentCounter = 1;
         this.commentsVisible = false;
@@ -25,11 +27,16 @@ class MarkiiupEditor {
         document.getElementById('new-btn').addEventListener('click', () => this.newDocument());
         document.getElementById('open-btn').addEventListener('click', () => this.openDocument());
         document.getElementById('save-btn').addEventListener('click', () => this.saveDocument());
+        document.getElementById('save-as-btn')?.addEventListener('click', () => this.saveDocumentAs());
         
         // Formatting buttons
         document.getElementById('bold-btn').addEventListener('click', () => this.execCommand('bold'));
         document.getElementById('italic-btn').addEventListener('click', () => this.execCommand('italic'));
         document.getElementById('underline-btn').addEventListener('click', () => this.execCommand('underline'));
+        
+        // Font selectors
+        document.getElementById('font-family-select').addEventListener('change', (e) => this.setFontFamily(e.target.value));
+        document.getElementById('font-size-select').addEventListener('change', (e) => this.setFontSize(e.target.value));
         
         // Heading selector
         document.getElementById('heading-select').addEventListener('change', (e) => this.formatHeading(e.target.value));
@@ -80,6 +87,37 @@ class MarkiiupEditor {
 
     execCommand(command, value = null) {
         document.execCommand(command, false, value);
+        this.editor.focus();
+    }
+    
+    setFontFamily(fontFamily) {
+        if (fontFamily && fontFamily !== 'inherit') {
+            this.execCommand('fontName', fontFamily);
+        } else {
+            // Reset to default font
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const span = document.createElement('span');
+                span.style.fontFamily = 'inherit';
+                
+                try {
+                    range.surroundContents(span);
+                } catch (e) {
+                    // If surroundContents fails, use insertNode
+                    const contents = range.extractContents();
+                    span.appendChild(contents);
+                    range.insertNode(span);
+                }
+            }
+        }
+        this.editor.focus();
+    }
+    
+    setFontSize(size) {
+        if (size) {
+            this.execCommand('fontSize', size);
+        }
         this.editor.focus();
     }
 
@@ -358,6 +396,8 @@ class MarkiiupEditor {
     newDocument() {
         this.editor.innerHTML = '<p>Start typing your document here...</p>';
         this.currentFileName = 'untitled.md';
+        this.currentFilePath = null;
+        this.currentFileHandle = null;
         this.comments = [];
         this.commentCounter = 1;
         this.documentTags.clear();
@@ -367,8 +407,37 @@ class MarkiiupEditor {
         this.updateStats();
     }
 
-    openDocument() {
-        document.getElementById('file-input').click();
+    async openDocument() {
+        // Try to use File System Access API if available
+        if ('showOpenFilePicker' in window) {
+            try {
+                const [fileHandle] = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'Markdown files',
+                        accept: { 'text/markdown': ['.md', '.markdown'] }
+                    }],
+                    multiple: false
+                });
+                
+                const file = await fileHandle.getFile();
+                const content = await file.text();
+                
+                this.currentFileHandle = fileHandle;
+                this.currentFileName = file.name;
+                this.currentFilePath = file.name; // In browser context, we only have the name
+                
+                this.loadMarkdownContent(content);
+                this.updateStats();
+            } catch (err) {
+                // User cancelled or error occurred
+                if (err.name !== 'AbortError') {
+                    console.error('Error opening file:', err);
+                }
+            }
+        } else {
+            // Fall back to traditional file input
+            document.getElementById('file-input').click();
+        }
     }
 
     handleFileLoad(e) {
@@ -382,6 +451,8 @@ class MarkiiupEditor {
                     console.log('File content loaded, length:', content.length);
                     this.loadMarkdownContent(content);
                     this.currentFileName = file.name;
+                    this.currentFilePath = null; // Can't get full path from input element
+                    this.currentFileHandle = null;
                     this.updateStats();
                 } catch (error) {
                     console.error('Error loading file:', error);
@@ -494,7 +565,50 @@ class MarkiiupEditor {
         return textNodes;
     }
 
-    saveDocument() {
+    async saveDocument() {
+        // Try to save in place if we have a file handle
+        if (this.currentFileHandle && 'createWritable' in this.currentFileHandle) {
+            try {
+                const htmlContent = this.editor.innerHTML;
+                let markdownContent = this.htmlToMarkdown(htmlContent);
+                
+                // Add comments to markdown
+                if (this.comments.length > 0) {
+                    markdownContent += '\n\n<!-- COMMENTS -->\n';
+                    this.comments.forEach((comment) => {
+                        const commentData = {
+                            text: comment.text,
+                            selectedText: comment.selectedText,
+                            author: comment.author,
+                            timestamp: comment.timestamp,
+                            completed: comment.completed || false,
+                            status: comment.status || 'open'
+                        };
+                        markdownContent += `<!-- COMMENT ${comment.id.replace('comment-', '')}: ${JSON.stringify(commentData)} -->\n`;
+                    });
+                }
+                
+                // Update document store before saving
+                this.updateDocumentInStore();
+                
+                const writable = await this.currentFileHandle.createWritable();
+                await writable.write(markdownContent);
+                await writable.close();
+                
+                // Show a brief success message
+                this.showNotification('File saved successfully!');
+                return;
+            } catch (err) {
+                console.error('Error saving file in place:', err);
+                // Fall back to download method
+            }
+        }
+        
+        // Fall back to download method
+        this.saveDocumentAs();
+    }
+    
+    async saveDocumentAs() {
         const htmlContent = this.editor.innerHTML;
         let markdownContent = this.htmlToMarkdown(htmlContent);
         
@@ -517,6 +631,40 @@ class MarkiiupEditor {
         // Update document store before saving
         this.updateDocumentInStore();
         
+        // Try to use File System Access API for Save As dialog
+        if ('showSaveFilePicker' in window) {
+            try {
+                const fileHandle = await window.showSaveFilePicker({
+                    suggestedName: this.currentFileName,
+                    types: [{
+                        description: 'Markdown files',
+                        accept: { 'text/markdown': ['.md', '.markdown'] }
+                    }]
+                });
+                
+                const writable = await fileHandle.createWritable();
+                await writable.write(markdownContent);
+                await writable.close();
+                
+                // Update current file handle and name for future saves
+                this.currentFileHandle = fileHandle;
+                this.currentFileName = fileHandle.name;
+                
+                this.showNotification('File saved successfully!');
+                return;
+            } catch (err) {
+                // User cancelled or error occurred
+                if (err.name !== 'AbortError') {
+                    console.error('Error saving file:', err);
+                    // Fall back to download method
+                } else {
+                    // User cancelled, just return
+                    return;
+                }
+            }
+        }
+        
+        // Fall back to download method for browsers without File System Access API
         const blob = new Blob([markdownContent], { type: 'text/markdown' });
         const url = URL.createObjectURL(blob);
         
@@ -527,6 +675,20 @@ class MarkiiupEditor {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+    
+    showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'toast toast-top toast-center';
+        notification.innerHTML = `
+            <div class="alert alert-success">
+                <span>${message}</span>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 
     htmlToMarkdown(html) {

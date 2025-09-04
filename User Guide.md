@@ -42,7 +42,7 @@ Welcome to the **markiiup User Guide** - your comprehensive reference for using 
 
 ---
 
-## 📊 Working with Tables (v1.1 Enhanced)
+## 📊 Working with Tables
 
 ### Creating Tables
 1. Click the table button (📊) dropdown in toolbar
@@ -166,21 +166,35 @@ Advanced users can access debug options in settings:
 
 ---
 
-## 💾 File Operations
+## 💾 File Operations (v1.2 Enhanced!)
 
-### Saving Documents
-- **Save as Markdown**: Click save button to export as `.md` file
-- **Clean Output**: Generated Markdown is clean and compatible
-- **Preserved Elements**: Comments, links, and formatting are maintained
+### Creating New Documents
+1. Click the menu (☰) button
+2. Select "New Document"
+3. Or use Ctrl/Cmd+N shortcut
 
-### Loading Documents
-- **Open Existing**: Click open button to load `.md` files
-- **Format Detection**: Markdown is automatically converted to rich text
-- **Comment Restoration**: Saved comments are restored with full functionality
+### Opening Files
+1. Click the menu (☰) button  
+2. Select "Open Document"
+3. Choose a `.md` file from your computer
+4. **v1.2**: In Chrome/Edge, uses File System Access API for better integration
+
+### Saving Your Work
+#### Save (v1.2 Smart Save)
+1. Click "Save" in menu
+2. If opened with File System Access API: saves to original location
+3. Otherwise: downloads to Downloads folder
+
+#### Save As (v1.2 New!)
+1. Click "Save As..." in menu
+2. **Chrome/Edge/Opera**: Shows system dialog to choose location
+3. **Other browsers**: Downloads to default folder
+4. After Save As, future saves go to chosen location
 
 ### File Compatibility
 - Works with any Markdown editor or processor
 - Comments are stored as HTML comments (invisible in other editors)
+- Font formatting preserved with HTML tags
 - Standard Markdown syntax for maximum portability
 
 ---

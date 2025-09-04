@@ -213,7 +213,24 @@
             border-bottom-right-radius: 0.5rem !important;
         }
         
-        /* Dropdown styling */
+        /* Select and Dropdown styling */
+        select.select {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+            border-color: #cbd5e1 !important;
+        }
+        
+        select.select:focus {
+            border-color: #2FAEAC !important;
+            outline: 2px solid transparent !important;
+            outline-offset: 2px !important;
+        }
+        
+        select.select option {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+        }
+        
         .dropdown-content {
             background-color: #ffffff !important;
             border: 1px solid #cbd5e1 !important;
@@ -338,7 +355,11 @@
                         </a></li>
                         <li><a id="save-btn">
                             <span class="material-icons">save</span>
-                            Save as Markdown
+                            Save
+                        </a></li>
+                        <li><a id="save-as-btn">
+                            <span class="material-icons">save_as</span>
+                            Save As...
                         </a></li>
                     </ul>
                 </div>
@@ -347,7 +368,7 @@
                 </div>
             </div>
             
-            <div class="navbar-center">
+            <div class="navbar-center flex flex-wrap gap-2">
                 <div class="join">
                     <!-- Text Formatting -->
                     <button id="bold-btn" class="btn btn-sm join-item">
@@ -361,10 +382,33 @@
                     </button>
                 </div>
                 
-                <div class="divider divider-horizontal"></div>
+                <!-- Font Controls Group -->
+                <div class="flex gap-1">
+                    <select id="font-family-select" class="select select-bordered select-sm w-32">
+                        <option value="inherit">Default</option>
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="'Times New Roman', serif">Times</option>
+                        <option value="Georgia, serif">Georgia</option>
+                        <option value="'Courier New', monospace">Courier</option>
+                        <option value="Verdana, sans-serif">Verdana</option>
+                        <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
+                        <option value="'Palatino Linotype', serif">Palatino</option>
+                    </select>
+                    
+                    <select id="font-size-select" class="select select-bordered select-sm w-20">
+                        <option value="">Size</option>
+                        <option value="1">8pt</option>
+                        <option value="2">10pt</option>
+                        <option value="3">12pt</option>
+                        <option value="4">14pt</option>
+                        <option value="5">18pt</option>
+                        <option value="6">24pt</option>
+                        <option value="7">36pt</option>
+                    </select>
+                </div>
                 
                 <!-- Heading Select -->
-                <select id="heading-select" class="select select-bordered select-sm w-36">
+                <select id="heading-select" class="select select-bordered select-sm w-32">
                     <option value="">Normal</option>
                     <option value="h1">Heading 1</option>
                     <option value="h2">Heading 2</option>
@@ -373,8 +417,6 @@
                     <option value="h5">Heading 5</option>
                     <option value="h6">Heading 6</option>
                 </select>
-                
-                <div class="divider divider-horizontal"></div>
                 
                 <!-- List Controls -->
                 <div class="join">
@@ -385,8 +427,6 @@
                         <span class="material-icons">format_list_numbered</span>
                     </button>
                 </div>
-                
-                <div class="divider divider-horizontal"></div>
                 
                 <!-- Insert Tools -->
                 <div class="join">
@@ -416,8 +456,6 @@
                         <span class="material-icons">comment</span>
                     </button>
                 </div>
-                
-                <div class="divider divider-horizontal"></div>
                 
                 <!-- View Controls -->
                 <button id="expand-btn" class="btn btn-sm">
@@ -562,7 +600,7 @@
                     </div>
                 </div>
                 <div class="text-xs opacity-70">
-                    Made with ♥️ from North Carolina, USA • markiiup v1.1
+                    Made with ♥️ from North Carolina, USA • markiiup v1.2
                 </div>
             </div>
         </div>

@@ -1,22 +1,29 @@
-# 📝 markiiup v1.1 Feature Showcase
+# 📝 markiiup v1.2 Feature Showcase
 
 ## Overview
 
-This document demonstrates all the features available in **markiiup v1.1** - a modern Microsoft Word-like editor that saves files in Markdown format. markiiup provides a rich WYSIWYG editing experience with distraction-free modes, advanced table editing, and integrated help system while maintaining clean Markdown output.
+This document demonstrates all the features available in **markiiup v1.2** - a modern Microsoft Word-like editor that saves files in Markdown format. markiiup provides a rich WYSIWYG editing experience with font management, enhanced file handling, distraction-free modes, and advanced table editing while maintaining clean Markdown output.
 
-> **New in v1.1**: Expanded writing view, improved table operations, and integrated GitHub support!
+> **New in v1.2**: Font family & size selection, smart save functionality, and proper Save As dialog!
 
 ---
 
 ## ✨ Core Features
 
-### 📄 File Operations
+### 📄 File Operations (v1.2 Enhanced!)
 
 - **New Document**: Create fresh documents with `📄` button
 
-- **Open Document**: Load existing `.md` files with `📁` button  
+- **Open Document**: Load existing `.md` files with `📁` button
+  - Chrome/Edge: Uses File System Access API for better integration
 
-- **Save as Markdown**: Export documents as clean Markdown with `💾` button
+- **Save**: Smart save with `💾` button
+  - Saves to original location when possible
+  - Falls back to download when needed
+
+- **Save As**: Choose save location with new Save As option
+  - Chrome/Edge/Opera: System file dialog
+  - Other browsers: Downloads to default folder
 
 - **Auto-save**: Documents are automatically converted to Markdown format
 
@@ -29,6 +36,21 @@ This document demonstrates all the features available in **markiiup v1.1** - a m
 - **Underline**: Use `U` button for underlined text
 
 - **Headings**: Select from H1-H6 dropdown for structured content
+
+### 🔤 Font Management (v1.2 New!)
+
+- **Font Family**: Choose from 8 professional fonts:
+  - Arial (sans-serif)
+  - Times New Roman (serif)
+  - Georgia (serif)
+  - Courier New (monospace)
+  - Verdana (sans-serif)
+  - Trebuchet MS (sans-serif)
+  - Palatino (serif)
+
+- **Font Size**: Adjust text size from 8pt to 36pt
+  - Perfect for emphasizing important content
+  - Maintains formatting when saving/loading
 
 ### 📋 Lists and Structure
 
@@ -64,20 +86,21 @@ This document demonstrates all the features available in **markiiup v1.1** - a m
 📊 Enhanced Table Example (v1.1)
 
 **How to edit this table:**
-1. Click any cell below
-2. Click the table button (📊) in toolbar  
-3. Choose your operation from the dropdown
+- Click any cell below
 
+- Click the table button (📊) in toolbar  
+
+Choose your operation from the dropdown
 | Feature | Description | Status | Version | Notes |
 | --- | --- | --- | --- | --- |
 | Rich Text Editing | WYSIWYG interface | ✅ Active | v1.0 | Core functionality |
 | Markdown Export | Clean MD output | ✅ Active | v1.0 | Bidirectional conversion |
 | Task Comments | Collaborative commenting | ✅ Active | v1.0 | Open/close states |
-| Wiki Links | Document linking `[[name]]` | ✅ Active | v1.0 | Auto-detection |
-| Tag System | `#hashtag` categorization | ✅ Active | v1.0 | Real-time processing |
-| **Expanded View** | **Distraction-free writing** | **✅ Active** | **v1.1** | **NEW: Wider editor** |
-| **Smart Tables** | **Toolbar-based operations** | **✅ Active** | **v1.1** | **NEW: Add/delete rows/cols** |
-| **Help Integration** | **GitHub issues access** | **✅ Active** | **v1.1** | **NEW: Direct support** | 
+| Wiki Links | Document linking `name` | ✅ Active | v1.0 | Auto-detection |
+| Tag System | `hashtag` categorization | ✅ Active | v1.0 | Real-time processing |
+| Expanded View | Distraction-free writing | ✅ Active | v1.1 | NEW: Wider editor |
+| Smart Tables | Toolbar-based operations | ✅ Active | v1.1 | NEW: Add/delete rows/cols |
+| Help Integration | GitHub issues access | ✅ Active | v1.1 | NEW: Direct support |
 
 ---
 
@@ -112,9 +135,7 @@ markiiup supports wiki-style document linking:
 - **Visual States**: 
 
   - Existing documents: Normal link styling
-  - Missing documents: "Broken" link styling
-
-Example links: [[Document Name]], [[User Guide]], [[Technical Specs]]
+  - Missing documents: "Broken" link stylingExample links: [[Document Name]], [[User Guide]], [[Technical Specs]]
 
 This document specifically references [[Document Name]] to test the backlink functionality.
 
@@ -123,8 +144,11 @@ This document specifically references [[Document Name]] to test the backlink fun
 markiiup supports hashtag-based categorization:
 
 - **Auto-detection**: Tags like #documentation #features #demo are automatically styled
+
 - **Real-time Processing**: Tags are processed as you type
+
 - **Visual Pills**: Tags appear as colored badges in both editor and sidebar
+
 - **Organization**: Use tags to categorize and organize your documents
 
 Try these tags: #markiiup #wysiwyg #markdown #v1.1 #showcase
@@ -243,34 +267,57 @@ Current document stats: 0 words, 0 characters
 ## 📋 Complete Feature Checklist
 
 ### Core Features (v1.0)
+
 - [x] Rich text editing (bold, italic, underline)
+
 - [x] Heading formatting (H1-H6)
+
 - [x] Bullet and numbered lists
+
 - [x] Hyperlink insertion
+
 - [x] Image embedding
+
 - [x] Table creation and editing
+
 - [x] Comment system with task management
+
 - [x] Wiki-style document linking with `[[Document Name]]`
+
 - [x] Hashtag tagging with `#tag` syntax
+
 - [x] Settings and user preferences
+
 - [x] Real-time word/character counting
+
 - [x] File operations (new, open, save)
+
 - [x] Bidirectional HTML ↔ Markdown conversion
+
 - [x] Comment persistence in saved files
+
 - [x] Microsoft Word-like interface
+
 - [x] No build process required (pure HTML/CSS/JS)
+
 - [x] Cross-document backlink tracking
+
 - [x] Modern UI with DaisyUI + Material Icons
 
 ### New Features (v1.1)
+
 - [x] **Expanded View**: Distraction-free writing mode
+
 - [x] **Smart Table Operations**: Toolbar-based table editing
+
   - [x] Add row above/below
   - [x] Add column left/right  
   - [x] Delete rows and columns
   - [x] Intuitive click-to-select workflow
 - [x] **Help Integration**: Direct GitHub issues access
+
 - [x] **Enhanced UI**: Improved button positioning and accessibility
+
 - [x] **Version Display**: Version shown in status bar
 
 ---
@@ -279,24 +326,36 @@ Current document stats: 0 words, 0 characters
 
 ### Getting Started with markiiup v1.1:
 
-1. **Basic Writing**: Start typing in the main editor area
-2. **Format Text**: Use toolbar buttons for bold, italic, underline, headings
-3. **Try Expanded View**: Click the `⛶` button for distraction-free writing
-4. **Add Comments**: Select text and click `💬` to add task-based comments
-5. **Create Links**: Type `[[Document Name]]` for wiki-style links
-6. **Add Tags**: Use `#hashtag` syntax for categorization
-7. **Work with Tables**: 
+- **Basic Writing**: Start typing in the main editor area
+
+- **Format Text**: Use toolbar buttons for bold, italic, underline, headings
+
+- **Try Expanded View**: Click the `⛶` button for distraction-free writing
+
+- **Add Comments**: Select text and click `💬` to add task-based comments
+
+- **Create Links**: Type `[[Document Name]]` for wiki-style links
+
+- **Add Tags**: Use `#hashtag` syntax for categorization
+
+- **Work with Tables**: 
+
    - Click table button dropdown → "New Table"
    - Click any cell, then table dropdown for editing options
-8. **Get Help**: Click `❓` button to report issues or request features
-9. **Save Work**: Click save button to export as clean Markdown
+- **Get Help**: Click `❓` button to report issues or request features
+
+- **Save Work**: Click save button to export as clean Markdown
 
 ### Testing Instructions:
 
 - **Table Editing**: Try adding/removing rows and columns from the table above
+
 - **Expanded Mode**: Toggle the expanded view to see the difference
+
 - **Comments**: Select this text and add a comment to test the system
+
 - **Links**: Click [[Document Name]] to test cross-document navigation
+
 - **Tags**: Notice how #testing #demo #tutorial appear as styled pills
 
 ---
