@@ -41,6 +41,10 @@ class MarkiiupEditor {
         // Heading selector
         document.getElementById('heading-select').addEventListener('change', (e) => this.formatHeading(e.target.value));
         
+        // Code formatting buttons
+        document.getElementById('code-btn')?.addEventListener('click', () => this.toggleInlineCode());
+        document.getElementById('code-block-btn')?.addEventListener('click', () => this.insertCodeBlock());
+        
         // List buttons
         document.getElementById('bullet-list-btn').addEventListener('click', () => this.execCommand('insertUnorderedList'));
         document.getElementById('number-list-btn').addEventListener('click', () => this.execCommand('insertOrderedList'));
@@ -119,6 +123,110 @@ class MarkiiupEditor {
             this.execCommand('fontSize', size);
         }
         this.editor.focus();
+    }
+    
+    toggleInlineCode() {
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        
+        const range = selection.getRangeAt(0);
+        const selectedText = range.toString();
+        
+        if (selectedText) {
+            // Check if already wrapped in code
+            const parentCode = this.getParentElement(selection.anchorNode, 'CODE');
+            
+            if (parentCode && !parentCode.parentNode.matches('pre')) {
+                // Remove code formatting
+                const text = parentCode.textContent;
+                const textNode = document.createTextNode(text);
+                parentCode.parentNode.replaceChild(textNode, parentCode);
+            } else {
+                // Add code formatting
+                const code = document.createElement('code');
+                code.style.backgroundColor = '#f3f4f6';
+                code.style.padding = '2px 4px';
+                code.style.borderRadius = '3px';
+                code.style.fontFamily = "'Courier New', monospace";
+                code.style.fontSize = '0.9em';
+                code.style.color = '#e11d48';
+                code.textContent = selectedText;
+                
+                range.deleteContents();
+                range.insertNode(code);
+                
+                // Select the newly created code element
+                range.selectNodeContents(code);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }
+        
+        this.editor.focus();
+    }
+    
+    insertCodeBlock() {
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        
+        // Create a pre element with code inside
+        const pre = document.createElement('pre');
+        pre.style.backgroundColor = '#1e293b';
+        pre.style.color = '#e2e8f0';
+        pre.style.padding = '16px';
+        pre.style.borderRadius = '6px';
+        pre.style.fontFamily = "'Courier New', monospace";
+        pre.style.fontSize = '14px';
+        pre.style.lineHeight = '1.5';
+        pre.style.overflowX = 'auto';
+        pre.style.margin = '16px 0';
+        
+        const code = document.createElement('code');
+        code.style.fontFamily = 'inherit';
+        code.style.fontSize = 'inherit';
+        code.style.backgroundColor = 'transparent';
+        code.style.color = 'inherit';
+        code.style.padding = '0';
+        
+        // If there's selected text, use it as the code content
+        const selectedText = range.toString();
+        if (selectedText) {
+            code.textContent = selectedText;
+            range.deleteContents();
+        } else {
+            code.textContent = '// Enter your code here';
+        }
+        
+        pre.appendChild(code);
+        
+        // Insert the code block
+        range.insertNode(pre);
+        
+        // Add a new paragraph after the code block for continued typing
+        const p = document.createElement('p');
+        const br = document.createElement('br');
+        p.appendChild(br);
+        pre.parentNode.insertBefore(p, pre.nextSibling);
+        
+        // Move cursor to the code block if it was empty
+        if (!selectedText) {
+            range.selectNodeContents(code);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+        
+        this.editor.focus();
+    }
+    
+    getParentElement(node, tagName) {
+        let parent = node;
+        while (parent && parent !== this.editor) {
+            if (parent.nodeName === tagName) {
+                return parent;
+            }
+            parent = parent.parentNode;
+        }
+        return null;
     }
 
     formatHeading(tag) {
@@ -733,6 +841,22 @@ class MarkiiupEditor {
         // Convert underline (not standard markdown, but we'll use HTML)
         markdown = markdown.replace(/<u[^>]*>(.*?)<\/u>/gi, '<u>$1</u>');
         
+        // Convert code blocks (pre with code inside)
+        markdown = markdown.replace(/<pre[^>]*>\s*<code[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/gi, (match, code) => {
+            // Decode HTML entities in code
+            const decodedCode = code
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'")
+                .replace(/&nbsp;/g, ' ');
+            return '```\n' + decodedCode + '\n```\n\n';
+        });
+        
+        // Convert inline code (but not code inside pre blocks)
+        markdown = markdown.replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`');
+        
         // Convert wiki links back to markdown
         markdown = markdown.replace(/<span[^>]*class="[^"]*wiki-link[^"]*"[^>]*data-link="([^"]*)"[^>]*>([^<]*)<\/span>/gi, '[[$1]]');
         
@@ -766,6 +890,9 @@ class MarkiiupEditor {
         // Convert line breaks
         markdown = markdown.replace(/<br[^>]*>/gi, '\n');
         
+        // Clean up any remaining styled spans (font-size, font-family etc)
+        markdown = markdown.replace(/<span[^>]*style="[^"]*"[^>]*>(.*?)<\/span>/gi, '$1');
+        
         // Clean up extra whitespace and HTML tags
         markdown = markdown.replace(/<[^>]*>/g, '');
         markdown = markdown.replace(/&nbsp;/g, ' ');
@@ -783,7 +910,19 @@ class MarkiiupEditor {
     markdownToHtml(markdown) {
         let html = markdown;
         
-        // Convert tables first
+        // Convert code blocks first (to protect their content)
+        html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
+            // Escape HTML entities in code
+            const escapedCode = code
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            return `<pre style="background-color: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.5; overflow-x: auto; margin: 16px 0;"><code style="font-family: inherit; font-size: inherit; background-color: transparent; color: inherit; padding: 0;">${escapedCode.trim()}</code></pre>`;
+        });
+        
+        // Convert tables (after code blocks to avoid conflicts)
         const tableRegex = /\n\s*\|(.+)\|\s*\n\s*\|[-\s|:]+\|\s*\n((?:\s*\|.+\|\s*\n)*)/g;
         html = html.replace(tableRegex, (match, header, rows) => {
             let tableHtml = '<table>';
@@ -812,6 +951,9 @@ class MarkiiupEditor {
             tableHtml += '</table>';
             return tableHtml;
         });
+        
+        // Convert inline code (but protect code blocks from being processed)
+        html = html.replace(/`([^`]+)`/g, '<code style="background-color: #f3f4f6; padding: 2px 4px; border-radius: 3px; font-family: \'Courier New\', monospace; font-size: 0.9em; color: #e11d48;">$1</code>');
         
         // Convert headings
         html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');

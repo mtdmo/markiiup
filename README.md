@@ -61,6 +61,12 @@ A modern JavaScript word processor that provides a Microsoft Word-like editing e
 - **File System Access API**: Modern file handling for supported browsers
 - **Fallback Support**: Automatic download for browsers without File System Access API
 
+### 💻 Code Formatting (v1.2.1)
+- **Inline Code**: Format selected text as `inline code` with monospace font
+- **Code Blocks**: Insert formatted code blocks with syntax-friendly styling
+- **Markdown Support**: Seamless conversion between HTML and Markdown for code
+- **Visual Styling**: Professional code appearance with proper highlighting
+
 ### 🛠️ Advanced Table Operations
 - **Smart Table Editing**: Click any table cell, then use toolbar dropdown for operations
 - **Row Management**: Add rows above/below, delete rows
@@ -200,10 +206,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Version History
 
-- **v1.2** (Current - September 2025) - Font management (family & size), enhanced file handling with File System Access API, proper Save As dialog
+- **v1.2.1** (Current - September 2025) - Added code formatting support (inline code and code blocks)
+- **v1.2** (September 2025) - Font management (family & size), enhanced file handling with File System Access API, proper Save As dialog
 - **v1.1** - Enhanced UI with expanded view, improved table operations, integrated help system
 - **v1.0** - Initial release with core WYSIWYG editing, comments, wiki links, tags, and modern UI
 
 ---
 
-Made with ❤️ from North Carolina, USA • markiiup v1.2
+Made with ❤️ from North Carolina, USA • markiiup v1.2.1
