@@ -120,6 +120,36 @@ html, body {
     text-decoration: underline;
 }
 
+/* Code Styles */
+.editor-content code {
+    background-color: #f3f4f6;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #e11d48;
+}
+
+.editor-content pre {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    padding: 16px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+.editor-content pre code {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+}
+
 /* Table Styles */
 .editor-content table {
     border-collapse: collapse;

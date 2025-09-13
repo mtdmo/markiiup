@@ -1,9 +1,9 @@
-# markiiup v1.2
+# markiiup v1.2.2
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/issues)
 [![GitHub stars](https://img.shields.io/github/stars/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/stargazers)
-[![Version](https://img.shields.io/badge/version-1.2-blue)](https://github.com/mtdmo/markiiup/releases)
+[![Version](https://img.shields.io/badge/version-1.2.2-blue)](https://github.com/mtdmo/markiiup/releases)
 
 A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format. Now with font management, enhanced file handling, and improved save functionality.
 
@@ -206,11 +206,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Version History
 
-- **v1.2.1** (Current - September 2025) - Added code formatting support (inline code and code blocks)
+- **v1.2.2** (Current - September 2025) - Fixed inline code and code block styling issues where CSS was displayed as text
+- **v1.2.1** (September 2025) - Added code formatting support (inline code and code blocks)
 - **v1.2** (September 2025) - Font management (family & size), enhanced file handling with File System Access API, proper Save As dialog
 - **v1.1** - Enhanced UI with expanded view, improved table operations, integrated help system
 - **v1.0** - Initial release with core WYSIWYG editing, comments, wiki links, tags, and modern UI
 
 ---
 
-Made with ❤️ from North Carolina, USA • markiiup v1.2.1
+Made with ❤️ from North Carolina, USA • markiiup v1.2.2

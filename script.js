@@ -14,6 +14,7 @@ class MarkiiupEditor {
         this.workingDirectory = this.detectWorkingDirectory(); // Track current working directory
         this.isExpanded = false; // Track expanded state
         this.activeTableCell = null; // Track the active table cell for context menu
+        this.appVersion = 'v1.2.2'; // Version display
         this.initializeEventListeners();
         this.loadTheme();
         this.updateStats();
@@ -919,7 +920,7 @@ class MarkiiupEditor {
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#39;');
-            return `<pre style="background-color: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.5; overflow-x: auto; margin: 16px 0;"><code style="font-family: inherit; font-size: inherit; background-color: transparent; color: inherit; padding: 0;">${escapedCode.trim()}</code></pre>`;
+            return `<pre><code>${escapedCode.trim()}</code></pre>`;
         });
         
         // Convert tables (after code blocks to avoid conflicts)
@@ -953,7 +954,7 @@ class MarkiiupEditor {
         });
         
         // Convert inline code (but protect code blocks from being processed)
-        html = html.replace(/`([^`]+)`/g, '<code style="background-color: #f3f4f6; padding: 2px 4px; border-radius: 3px; font-family: \'Courier New\', monospace; font-size: 0.9em; color: #e11d48;">$1</code>');
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
         
         // Convert headings
         html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
