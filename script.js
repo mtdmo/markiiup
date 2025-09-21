@@ -14,7 +14,7 @@ class MarkiiupEditor {
         this.workingDirectory = this.detectWorkingDirectory(); // Track current working directory
         this.isExpanded = false; // Track expanded state
         this.activeTableCell = null; // Track the active table cell for context menu
-        this.appVersion = 'v1.2.2'; // Version display
+        this.appVersion = 'v1.2.3'; // Version display
         this.initializeEventListeners();
         this.loadTheme();
         this.updateStats();
@@ -34,6 +34,7 @@ class MarkiiupEditor {
         document.getElementById('bold-btn').addEventListener('click', () => this.execCommand('bold'));
         document.getElementById('italic-btn').addEventListener('click', () => this.execCommand('italic'));
         document.getElementById('underline-btn').addEventListener('click', () => this.execCommand('underline'));
+        document.getElementById('remove-format-btn').addEventListener('click', () => this.removeFormatting());
         
         // Font selectors
         document.getElementById('font-family-select').addEventListener('change', (e) => this.setFontFamily(e.target.value));
@@ -123,6 +124,78 @@ class MarkiiupEditor {
         if (size) {
             this.execCommand('fontSize', size);
         }
+        this.editor.focus();
+    }
+    
+    removeFormatting() {
+        const selection = window.getSelection();
+        if (!selection.rangeCount) {
+            // If no selection, apply to entire document
+            this.execCommand('removeFormat');
+            this.execCommand('formatBlock', 'div');
+            this.editor.focus();
+            return;
+        }
+        
+        const range = selection.getRangeAt(0);
+        
+        if (range.collapsed) {
+            // No text selected, remove format at cursor position
+            this.execCommand('removeFormat');
+            this.execCommand('formatBlock', 'div');
+        } else {
+            // Text is selected, remove formatting from selection
+            this.execCommand('removeFormat');
+            
+            // Also reset font family and size for the selection
+            const tempDiv = document.createElement('div');
+            const fragment = range.extractContents();
+            
+            // Walk through all nodes and remove inline styles
+            const walker = document.createTreeWalker(
+                fragment,
+                NodeFilter.SHOW_ELEMENT,
+                null,
+                false
+            );
+            
+            const elementsToClean = [];
+            let node = walker.nextNode();
+            while (node) {
+                elementsToClean.push(node);
+                node = walker.nextNode();
+            }
+            
+            elementsToClean.forEach(element => {
+                // Remove all inline styles
+                element.removeAttribute('style');
+                // Remove font tags
+                if (element.tagName === 'FONT') {
+                    element.removeAttribute('face');
+                    element.removeAttribute('size');
+                    element.removeAttribute('color');
+                }
+                // Convert certain elements to plain text
+                if (['B', 'STRONG', 'I', 'EM', 'U', 'STRIKE', 'S'].includes(element.tagName)) {
+                    const parent = element.parentNode;
+                    if (parent) {
+                        while (element.firstChild) {
+                            parent.insertBefore(element.firstChild, element);
+                        }
+                        parent.removeChild(element);
+                    }
+                }
+            });
+            
+            // Reinsert the cleaned content
+            range.insertNode(fragment);
+            
+            // Reselect the content
+            range.selectNodeContents(range.commonAncestorContainer);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+        
         this.editor.focus();
     }
     

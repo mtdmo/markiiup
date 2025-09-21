@@ -1,9 +1,9 @@
-# markiiup v1.2.2
+# markiiup v1.2.3
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/issues)
 [![GitHub stars](https://img.shields.io/github/stars/mtdmo/markiiup)](https://github.com/mtdmo/markiiup/stargazers)
-[![Version](https://img.shields.io/badge/version-1.2.2-blue)](https://github.com/mtdmo/markiiup/releases)
+[![Version](https://img.shields.io/badge/version-1.2.3-blue)](https://github.com/mtdmo/markiiup/releases)
 
 A modern JavaScript word processor that provides a Microsoft Word-like editing experience while saving files in Markdown format. Now with font management, enhanced file handling, and improved save functionality.
 
@@ -20,6 +20,7 @@ A modern JavaScript word processor that provides a Microsoft Word-like editing e
 - **Text Formatting**: Bold, italic, underline, headings (H1-H6)
 - **Font Management**: Choose from multiple font families (Arial, Times New Roman, Georgia, Courier, Verdana, and more)
 - **Font Sizing**: Adjustable font sizes from 8pt to 36pt
+- **Remove Formatting**: Clear all formatting with a single click
 - **Lists**: Bullet and numbered lists
 - **Advanced Tables**: Full table support with intuitive editing operations
 - **Links & Images**: Easy insertion with toolbar buttons
@@ -206,7 +207,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Version History
 
-- **v1.2.2** (Current - September 2025) - Fixed inline code and code block styling issues where CSS was displayed as text
+- **v1.2.3** (Current - December 2024) - Added Remove Formatting feature with format_clear toolbar button
+- **v1.2.2** (September 2025) - Fixed inline code and code block styling issues where CSS was displayed as text
 - **v1.2.1** (September 2025) - Added code formatting support (inline code and code blocks)
 - **v1.2** (September 2025) - Font management (family & size), enhanced file handling with File System Access API, proper Save As dialog
 - **v1.1** - Enhanced UI with expanded view, improved table operations, integrated help system
@@ -214,4 +216,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ from North Carolina, USA • markiiup v1.2.2
+Made with ❤️ from North Carolina, USA • markiiup v1.2.3
