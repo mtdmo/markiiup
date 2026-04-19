@@ -56,5 +56,7 @@ jspm_packages/
 # Temporary files
 *.tmp
 *.temp
+.build/
+dist/
 Futureidea.md
 markiiup.code-workspace
