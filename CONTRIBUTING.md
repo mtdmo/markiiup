@@ -1,65 +1,51 @@
 # Contributing to markiiup
 
-Thank you for your interest in contributing to markiiup! This document provides guidelines for contributing to the project.
+Thank you for contributing to `markiiup`.
 
-## How to Contribute
+The project is now a native macOS app built with SwiftUI, AppKit interop, and SwiftPM. The main product constraint is simple: keep Markdown canonical on disk while making the document canvas better to edit.
 
-### Reporting Bugs
-- Use the GitHub Issues page
-- Include a clear description of the bug
-- Provide steps to reproduce the issue
-- Include browser and OS information if relevant
+## Reporting Bugs
 
-### Suggesting Features
-- Use the GitHub Issues page
-- Describe the feature and its benefits
-- Consider if it aligns with the project's goals
+- Open a GitHub issue with clear reproduction steps
+- Include the macOS version you tested on
+- Include whether the issue happens in `Document`, `Markdown`, or both modes
+- If relevant, attach the Markdown snippet that triggers the problem
 
-### Code Contributions
+## Suggesting Features
 
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. **Make your changes**
-   - Follow the existing code style
-   - Add comments for complex logic
-   - Test your changes thoroughly
-4. **Commit your changes**
-   ```bash
-   git commit -m "Add: brief description of changes"
-   ```
-5. **Push to your fork**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-6. **Create a Pull Request**
+- Open a GitHub issue describing the workflow problem first
+- Prioritize document-canvas editing, Markdown round-tripping, navigation, and review workflows
 
-## Development Guidelines
+## Local Setup
 
-### Code Style
-- Use consistent indentation (2 spaces)
-- Follow existing naming conventions
-- Keep functions focused and readable
-- Add comments for complex logic
+```bash
+swift build
+./script/build_and_run.sh
+```
 
-### Testing
-- Test in multiple browsers (Chrome, Firefox, Safari, Edge)
-- Test on both desktop and mobile devices
-- Ensure the editor works with various Markdown content
+Useful checks:
 
-### File Structure
-- Keep the project structure simple
-- No build process required - everything should work by opening `index.html`
-- Maintain backward compatibility
+```bash
+./script/build_and_run.sh --sample
+./script/build_and_run.sh --verify
+```
 
-## Getting Started
+## Contribution Guidelines
 
-1. Clone the repository
-2. Open `index.html` in your browser
-3. Start editing and testing
+1. Create a branch for your work
+2. Keep changes focused and intentional
+3. Prefer native macOS patterns over custom web-style UI abstractions
+4. Keep AppKit interop narrow and explicit
+5. Update sample Markdown docs when product behavior changes enough that the current examples become misleading
+6. Run `swift build` before opening a PR
 
-## Questions?
+## Testing Expectations
 
-Feel free to open an issue for any questions about contributing! 
+- Verify the app builds successfully
+- Manually test the affected document workflow
+- If you change the editor bridge or document canvas, test both `Document` and `Markdown` modes
+- If you change table behavior, confirm the resulting `.md` table remains valid and readable
+
+## Questions
+
+Open a GitHub issue if you need clarification before contributing.

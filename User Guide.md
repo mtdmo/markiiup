@@ -1,256 +1,83 @@
-# 📖 markiiup v1.1 User Guide
+# markiiup User Guide
 
-Welcome to the **markiiup User Guide** - your comprehensive reference for using markiiup's powerful features effectively.
+`markiiup` is a native macOS Markdown editor. The file on disk stays plain Markdown, while the app gives you a richer document canvas for editing.
 
-> **Quick Start**: New to markiiup? Check out the [[examplefile]] for a complete feature showcase!
+## Getting Started
 
----
+1. Run `./script/build_and_run.sh --sample` from the repo root, or open the app bundle after building
+2. Open a `.md` file directly, or use the bundled sample document
+3. Stay in `Document` mode for normal editing
+4. Switch to `Markdown` when you need exact source control
 
-## 🚀 Getting Started
+## Interface Overview
 
-### First Steps
-1. **Open markiiup**: Load `index.html` in any modern web browser
-2. **Start Writing**: Click in the editor area and begin typing
-3. **Explore Features**: Use the toolbar buttons to format your content
-4. **Save Your Work**: Click the save button to export as Markdown
+- `Document Canvas`: the main editing surface
+- `Markdown`: raw source mode for the same file
+- `Sidebar`: workspace files, related files, outline, tasks, links, tags, tables, SQL blocks, and front matter
+- `Toolbar`: formatting, table insertion, workspace controls
 
-### Interface Overview
-- **Toolbar**: All formatting and feature buttons at the top
-- **Editor**: Main writing area with WYSIWYG editing
-- **Sidebar**: Comments, tags, and backlinks panel (toggle with sidebar button)
-- **Status Bar**: Word count, character count, and version info
+## Writing In The Document Canvas
 
----
+The canvas live-styles Markdown so headings, emphasis, lists, links, tables, and code blocks read more like a document while still saving back to `.md`.
 
-## ✍️ Writing and Formatting
+Available formatting actions:
 
-### Basic Text Formatting
-- **Bold**: Select text and click `B` or use Ctrl+B
-- **Italic**: Select text and click `I` or use Ctrl+I  
-- **Underline**: Select text and click `U` button
-- **Headings**: Select text and choose H1-H6 from dropdown
+- bold
+- italic
+- inline code
+- headings
+- quote blocks
+- checklists
+- links
+- table insertion
 
-### Lists and Structure
-- **Bullet Lists**: Click the bullet list button or type `- ` at line start
-- **Numbered Lists**: Click numbered list button or type `1. ` at line start
-- **Nested Lists**: Use Tab to indent list items
+## Working With Tables
 
-### Links and Media
-- **Hyperlinks**: Click link button and enter URL
-- **Images**: Click image button and enter image URL
-- **Wiki Links**: Type `[[Document Name]]` for internal document links
+Tables are now edited directly from the document canvas flow.
 
----
+### Insert A Table
 
-## 📊 Working with Tables
+- Use the `tablecells` toolbar menu
+- Or use the command menu action for a 3 x 3 table
 
-### Creating Tables
-1. Click the table button (📊) dropdown in toolbar
-2. Select "New Table"
-3. Enter number of rows and columns
-4. Table appears with sample content
+### Edit A Table
 
-### Editing Tables  
-The new v1.1 table system is much more intuitive:
+1. Put the cursor inside a Markdown table while in `Document` mode
+2. The inline table editor appears above the text view
+3. Edit cells directly in the grid
+4. Use `Add Row`, `Delete Row`, `Add Column`, and `Delete Column`
+5. Save the document as normal
 
-1. **Select**: Click any cell in the table you want to edit
-2. **Access Menu**: Click the table button (📊) dropdown again
-3. **Choose Operation**: Select from available options:
-   - Add Row Above
-   - Add Row Below  
-   - Add Column Left
-   - Add Column Right
-   - Delete Row
-   - Delete Column
+The Markdown table block is rewritten underneath the editor, so the file remains portable.
 
-### Table Tips
-- Tables automatically convert to proper Markdown format when saved
-- All table operations preserve existing content
-- Use tables for structured data, feature comparisons, and organized information
+## Workspace Navigation
 
----
+Use `Choose Folder` to point the sidebar at a Markdown workspace.
 
-## 💬 Comments and Task Management
+The sidebar can then help you:
 
-### Adding Comments
-1. **Select Text**: Highlight any text you want to comment on
-2. **Add Comment**: Click the comment button (💬) in toolbar
-3. **Enter Comment**: Type your comment text in the prompt
-4. **View Comments**: Toggle the sidebar to see all comments
+- open related files from Markdown links and `[[wiki links]]`
+- jump through headings and tasks
+- inspect detected links, tags, tables, and SQL blocks
+- filter sidebar sections from the inline search field
 
-### Managing Tasks
-Comments in markiiup function as tasks:
-- **Open Tasks**: Appear with yellow highlighting and "OPEN" status
-- **Complete Tasks**: Click "Close" to mark as completed (green highlight + strikethrough)
-- **Task Persistence**: Comments are saved in Markdown files and persist across sessions
+## Saving Files
 
-### Collaboration Features
-- Set your name in Settings for comment attribution
-- Comments include timestamps for tracking
-- Use comments for project planning, feedback, and task tracking
+This is a document-based macOS app, so save behavior follows the normal system document flow.
 
----
+- Open a Markdown file and edit it directly
+- Save writes back to the same `.md` file
+- Use the system document actions when you want a new file or a copy
 
-## 🔗 Wiki Links and Navigation
+## Suggested Test Files
 
-### Creating Wiki Links
-- **Syntax**: Use double brackets `[[Document Name]]`
-- **Auto-Detection**: Links are styled automatically as you type
-- **Visual Feedback**: 
-  - Blue background: Valid links to existing documents
-  - Red background: Broken links to missing documents
+- [[examplefile]]
+- [[Document Name]]
 
-### Navigation
-- **Click Links**: Click any wiki link to navigate (or create new documents)
-- **Backlinks**: View which documents reference the current document
-- **Document Network**: Build interconnected document collections
+## Validation Checklist
 
-### Best Practices
-- Use descriptive document names for better organization
-- Create index documents with links to related content
-- Check the backlinks panel to understand document relationships
-
----
-
-## 🏷️ Tags and Organization
-
-### Adding Tags
-- **Syntax**: Use hashtag format `#tagname`
-- **Auto-Styling**: Tags appear as colored pills automatically
-- **Multiple Tags**: Add multiple tags throughout your document
-
-### Tag Benefits
-- **Categorization**: Group related documents by topic
-- **Visual Organization**: Tags appear in sidebar with counts
-- **Future Features**: Tags will enable filtering and search
-
-### Tag Examples
-Try these organizational patterns:
-- **Project Tags**: #frontend #backend #design
-- **Status Tags**: #todo #inprogress #completed
-- **Content Tags**: #tutorial #reference #example
-
----
-
-## 🎯 New v1.1 Features
-
-### Expanded View Mode
-- **Purpose**: Distraction-free writing with wider editor space
-- **How to Use**: Click the expand button (⛶) in toolbar
-- **Benefits**: 
-  - Wider writing area for better focus
-  - Hides sidebar automatically
-  - Perfect for long-form writing
-- **Toggle**: Click again to return to normal view
-
-### Enhanced Help System
-- **Direct Support**: Click the help button (❓) for GitHub issues
-- **Bug Reports**: Submit issues directly from the app
-- **Feature Requests**: Request new features via integrated link
-- **Community**: Connect with other markiiup users and developers
-
----
-
-## ⚙️ Settings and Customization
-
-### User Settings
-Access settings via the gear button (⚙️):
-- **Name**: Set your name for comment attribution
-- **Email**: Optional email for enhanced features (future use)
-- **Persistence**: Settings are saved in browser localStorage
-
-### Debug Tools
-Advanced users can access debug options in settings:
-- **Document Store**: View internal document database
-- **Clear Store**: Reset all stored document information
-
----
-
-## 💾 File Operations (v1.2 Enhanced!)
-
-### Creating New Documents
-1. Click the menu (☰) button
-2. Select "New Document"
-3. Or use Ctrl/Cmd+N shortcut
-
-### Opening Files
-1. Click the menu (☰) button  
-2. Select "Open Document"
-3. Choose a `.md` file from your computer
-4. **v1.2**: In Chrome/Edge, uses File System Access API for better integration
-
-### Saving Your Work
-#### Save (v1.2 Smart Save)
-1. Click "Save" in menu
-2. If opened with File System Access API: saves to original location
-3. Otherwise: downloads to Downloads folder
-
-#### Save As (v1.2 New!)
-1. Click "Save As..." in menu
-2. **Chrome/Edge/Opera**: Shows system dialog to choose location
-3. **Other browsers**: Downloads to default folder
-4. After Save As, future saves go to chosen location
-
-### File Compatibility
-- Works with any Markdown editor or processor
-- Comments are stored as HTML comments (invisible in other editors)
-- Font formatting preserved with HTML tags
-- Standard Markdown syntax for maximum portability
-
----
-
-## 🔧 Troubleshooting
-
-### Common Issues
-- **Comments Not Saving**: Ensure you're using the save button to export
-- **Links Not Working**: Check that wiki link syntax is correct `[[Name]]`
-- **Table Issues**: Use the new v1.1 table dropdown for operations
-- **Performance**: For large documents, try expanded view mode
-
-### Getting Help
-1. **Documentation**: Review this guide and [[examplefile]]
-2. **GitHub Issues**: Click help button (❓) to report problems
-3. **Test Documents**: Use [[Document Name]] to test features
-
----
-
-## 📚 Related Documents
-
-- **[[examplefile]]** - Complete feature showcase and demonstrations
-- **[[Document Name]]** - Backlinks and cross-reference testing
-- **[[Technical Specs]]** - Implementation details (create this document!)
-
----
-
-## 🎯 Quick Reference
-
-### Keyboard Shortcuts
-- **Ctrl+B**: Bold text
-- **Ctrl+I**: Italic text
-- **Ctrl+S**: Save document (browser save)
-
-### Syntax Quick Reference
-- `**bold**` - Bold text
-- `*italic*` - Italic text
-- `[[Document Name]]` - Wiki links
-- `#hashtag` - Tags
-- `| col1 | col2 |` - Table syntax
-
-### Button Quick Reference
-- **📄** - New document
-- **📁** - Open document  
-- **💾** - Save as Markdown
-- **B/I/U** - Text formatting
-- **📊** - Table operations (dropdown)
-- **💬** - Add comments
-- **🔗** - Insert hyperlinks
-- **⛶** - Expanded view
-- **❓** - Help & issues
-- **⚙️** - Settings
-
----
-
-*This user guide demonstrates cross-document linking by referencing [[examplefile]] and [[Document Name]]. It also showcases various tags like #tutorial #userguide #v1.1 #reference for organizational purposes.*
-
-<!-- COMMENTS -->
-<!-- COMMENT: {"text":"User guide provides comprehensive instructions","selectedText":"markiiup v1.1 User Guide","author":"Documentation Team","timestamp":"8/9/2025, 12:00:00 PM","completed":false,"status":"open"} -->
+- [ ] Open a real `.md` file
+- [ ] Edit content in `Document` mode
+- [ ] Switch to `Markdown` mode and confirm the source stays readable
+- [ ] Put the cursor inside a table and edit rows, columns, and cells
+- [ ] Save and reopen the file successfully

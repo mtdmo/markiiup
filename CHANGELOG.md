@@ -8,28 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial release of markiiup
-- WYSIWYG Markdown editor with Word-like interface
-- Rich text formatting (bold, italic, underline, headings)
-- Bullet and numbered lists
-- Table support with Markdown conversion
-- Link and image insertion
-- Task-based comments system
-- Wiki-style linking with `[[Document Name]]` syntax
-- Tag system with `#tagname` syntax
-- Backlink tracking
-- Modern UI with Tailwind CSS and DaisyUI
-- Material Design icons
-- Responsive design for mobile and desktop
-- LocalStorage for settings and document store
+- Native macOS v2 app foundation built with SwiftUI, AppKit, and SwiftPM
+- Document-based `.md` open/save workflow for the macOS app
+- Native Markdown menu and toolbar commands for common editing actions
+- Workspace folder picker and Markdown file browser in the native app
+- Related-file resolution for local Markdown links and wiki links
+- Sidebar analysis for headings, tasks, links, tags, and front matter
+- Single-pane document canvas that live-styles Markdown while keeping the file canonical
+- Local build-and-run script plus Codex Run action for the macOS app
+- App bundle icon generation based on the cat logo
+- Sidebar-native filtering for workspace and document sections
+- Table and fenced-code review cards in the sidebar
+- Inline document-canvas table editor with row, column, and cell updates
+- Table insertion actions in the toolbar and command menu
 
-### Technical Features
-- Bidirectional HTML ↔ Markdown conversion
-- Real-time text processing for links and tags
-- Single-page application architecture
-- No build process required
-- Works offline once loaded
-- Cross-browser compatibility
+### Changed
+- Reframed the repository as a native macOS app
+- Kept Markdown as the canonical file format
+- Replaced split-preview editing with document-canvas and raw-markdown modes
+- Cleaned public docs and sample files around the desktop-only product
+
+### Removed
+- Legacy HTML/CSS/JavaScript web application files
+- Legacy web release notes and push helper script
 
 ## [1.0.0] - 2024-12-19
 
@@ -42,7 +43,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tag system with visual indicators
 - Modern, responsive UI
 - Cross-browser support
-
----
-
-For more information about changes, see the [GitHub releases](https://github.com/yourusername/markiiup/releases). 
