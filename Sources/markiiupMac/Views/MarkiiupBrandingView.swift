@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 
+@MainActor
 private enum MarkiiupBrandResources {
     static let catImage: NSImage? = {
         guard let url = Bundle.main.url(forResource: "markiiup_cat", withExtension: "png") else {
