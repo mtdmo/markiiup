@@ -45,6 +45,7 @@ struct NativeMarkdownTextView: NSViewRepresentable {
 
         scrollView.documentView = textView
         context.coordinator.textView = textView
+        textView.textStorage?.delegate = context.coordinator
         context.coordinator.applyPresentation(to: textView)
         editorState.updateSelection(textView.selectedRange(), in: textView.string)
         return scrollView
@@ -74,7 +75,7 @@ struct NativeMarkdownTextView: NSViewRepresentable {
     }
 
     @MainActor
-    final class Coordinator: NSObject, NSTextViewDelegate {
+    final class Coordinator: NSObject, NSTextViewDelegate, NSTextStorageDelegate {
         var parent: NativeMarkdownTextView
         weak var textView: NSTextView?
         private var lastHandledRequestID: UUID?
@@ -93,7 +94,6 @@ struct NativeMarkdownTextView: NSViewRepresentable {
 
             let updatedText = textView.string
             parent.text = updatedText
-            applyPresentation(to: textView, force: true)
             parent.editorState.updateSelection(textView.selectedRange(), in: updatedText)
         }
 
@@ -103,6 +103,27 @@ struct NativeMarkdownTextView: NSViewRepresentable {
             }
 
             parent.editorState.updateSelection(textView.selectedRange(), in: textView.string)
+        }
+
+        nonisolated func textStorage(
+            _ textStorage: NSTextStorage,
+            didProcessEditing editedMask: NSTextStorageEditActions,
+            range editedRange: NSRange,
+            changeInLength _: Int
+        ) {
+            guard editedMask != .editedAttributes else {
+                return
+            }
+
+            Task { @MainActor [weak self] in
+                guard let self,
+                      let textView = self.textView
+                else {
+                    return
+                }
+
+                self.applyPresentation(to: textView, editedRange: editedRange)
+            }
         }
 
         func applyPendingRequestIfNeeded() {
@@ -118,7 +139,7 @@ struct NativeMarkdownTextView: NSViewRepresentable {
             parent.editorState.markHandled(request)
         }
 
-        func applyPresentation(to textView: NSTextView, force: Bool = false) {
+        func applyPresentation(to textView: NSTextView, editedRange: NSRange? = nil, force: Bool = false) {
             guard !isApplyingPresentation else {
                 return
             }
@@ -132,7 +153,13 @@ struct NativeMarkdownTextView: NSViewRepresentable {
 
             isApplyingPresentation = true
             let selectedRange = textView.selectedRange()
-            MarkdownTextStyler.apply(to: textView, text: text, presentation: mode)
+            MarkdownTextStyler.apply(
+                to: textView,
+                text: text,
+                presentation: mode,
+                editedRange: editedRange,
+                forceFullLayout: force || editedRange == nil
+            )
 
             if textView.selectedRange() != selectedRange {
                 textView.setSelectedRange(selectedRange)

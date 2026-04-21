@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document-based `.md` open/save workflow for the macOS app
 - Native Markdown menu and toolbar commands for common editing actions
 - Workspace folder picker and Markdown file browser in the native app
+- Live workspace file watching for automatic refresh when Markdown folders change
 - Related-file resolution for local Markdown links and wiki links
 - Sidebar analysis for headings, tasks, links, tags, and front matter
 - Single-pane document canvas that live-styles Markdown while keeping the file canonical
@@ -21,12 +22,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Table and fenced-code review cards in the sidebar
 - Inline document-canvas table editor with row, column, and cell updates
 - Table insertion actions in the toolbar and command menu
+- Review baseline capture with persisted document checkpoints and change summaries
+- SwiftPM tests for review-baseline comparisons
 
 ### Changed
 - Reframed the repository as a native macOS app
 - Kept Markdown as the canonical file format
 - Replaced split-preview editing with document-canvas and raw-markdown modes
 - Cleaned public docs and sample files around the desktop-only product
+- Moved the document canvas styling path to an incremental restyling flow for ordinary edits
 
 ### Removed
 - Legacy HTML/CSS/JavaScript web application files

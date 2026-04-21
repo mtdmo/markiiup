@@ -4,6 +4,7 @@ struct ContentView: View {
     @Binding var document: MarkdownDocument
     let currentFileURL: URL?
     @StateObject private var editorState = MarkdownEditorState()
+    @StateObject private var reviewBaselineStore = ReviewBaselineStore()
     @StateObject private var workspaceStore = WorkspaceStore()
     @State private var mode: WorkspaceMode = .document
     @State private var sidebarQuery = ""
@@ -16,10 +17,17 @@ struct ContentView: View {
         NavigationSplitView {
             SidebarView(
                 analysis: analysis,
+                reviewBaselineStore: reviewBaselineStore,
                 workspaceStore: workspaceStore,
                 currentFileURL: currentFileURL,
                 query: $sidebarQuery,
                 currentLine: editorState.currentLine,
+                captureBaseline: {
+                    reviewBaselineStore.captureBaseline(currentText: document.text, currentAnalysis: analysis)
+                },
+                clearBaseline: {
+                    reviewBaselineStore.clearBaseline(currentText: document.text, currentAnalysis: analysis)
+                },
                 jumpToLine: { lineNumber in
                     editorState.send(.jumpToLine(lineNumber))
                 }
@@ -29,6 +37,7 @@ struct ContentView: View {
             ReviewWorkspaceView(
                 document: $document,
                 analysis: analysis,
+                reviewSummary: reviewBaselineStore.summary,
                 mode: $mode,
                 editorState: editorState
             )
@@ -42,9 +51,25 @@ struct ContentView: View {
         .frame(minWidth: 1100, minHeight: 720)
         .onAppear {
             workspaceStore.primeWorkspace(for: currentFileURL)
+            reviewBaselineStore.bind(
+                fileURL: currentFileURL,
+                currentText: document.text,
+                currentAnalysis: analysis
+            )
         }
         .onChange(of: currentFileURL) { _, newValue in
             workspaceStore.primeWorkspace(for: newValue)
+            reviewBaselineStore.bind(
+                fileURL: newValue,
+                currentText: document.text,
+                currentAnalysis: analysis
+            )
+        }
+        .onChange(of: document.text) { _, newValue in
+            reviewBaselineStore.updateCurrentText(
+                newValue,
+                currentAnalysis: MarkdownReviewParser.analyze(newValue)
+            )
         }
         .toolbarRole(.editor)
         .toolbar {

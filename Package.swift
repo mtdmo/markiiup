@@ -15,6 +15,10 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "markiiupMac"
+        ),
+        .testTarget(
+            name: "markiiupMacTests",
+            dependencies: ["markiiupMac"]
         )
     ]
 )

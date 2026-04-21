@@ -1,0 +1,39 @@
+name: Feature request
+description: Propose an improvement to the document canvas or Markdown workflow
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Focus on the workflow problem first. The best requests explain where the current document-canvas experience breaks down.
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow problem
+      description: What are you trying to do, and where does the current app get in the way?
+      placeholder: Reviewing a tech spec with dense tables requires too much mode switching
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+      description: Describe the behavior you want to see.
+      placeholder: Let me edit table cells directly in the document canvas and keep Markdown canonical on save
+    validations:
+      required: true
+  - type: textarea
+    id: markdown
+    attributes:
+      label: Example Markdown or document pattern
+      description: Paste a representative snippet if it helps.
+      render: markdown
+  - type: textarea
+    id: success
+    attributes:
+      label: What would success look like?
+      description: Describe the outcome that would make this feature worthwhile.
+    validations:
+      required: true

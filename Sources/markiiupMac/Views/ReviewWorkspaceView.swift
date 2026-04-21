@@ -4,6 +4,7 @@ import SwiftUI
 struct ReviewWorkspaceView: View {
     @Binding var document: MarkdownDocument
     let analysis: MarkdownAnalysis
+    let reviewSummary: ReviewBaselineSummary?
     @Binding var mode: WorkspaceMode
     @ObservedObject var editorState: MarkdownEditorState
 
@@ -12,6 +13,7 @@ struct ReviewWorkspaceView: View {
             text: $document.text,
             editorState: editorState,
             metrics: analysis.metrics,
+            reviewSummary: reviewSummary,
             mode: mode
         )
         .frame(maxWidth: .infinity, maxHeight: .infinity)

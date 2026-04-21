@@ -104,5 +104,6 @@ After opening this file:
 1. Choose the repo root as the workspace folder.
 2. Open `Document Name.md` from the sidebar.
 3. Switch between `Document` and `Markdown` modes.
-4. Apply formatting from the toolbar.
-5. Save and confirm the file remains clean Markdown.
+4. Capture a review baseline from the sidebar.
+5. Apply formatting from the toolbar or modify a table cell.
+6. Save and confirm the file remains clean Markdown while the baseline summary reflects the changes.
