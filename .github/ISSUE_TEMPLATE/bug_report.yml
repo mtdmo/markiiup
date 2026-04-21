@@ -1,0 +1,68 @@
+name: Bug report
+description: Report a reproducible problem in the macOS Markdown editor
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please include the Markdown snippet or workflow that triggered it so the round-trip behavior is reproducible.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: What broke?
+      placeholder: The document canvas drops escaped pipes after editing a table cell
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: macOS 15.4.1
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Where did it happen?
+      multiple: true
+      options:
+        - Document mode
+        - Markdown mode
+        - Workspace sidebar
+        - File open/save
+        - App launch
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide a minimal sequence that reproduces the issue.
+      placeholder: |
+        1. Open examplefile.md
+        2. Put the cursor inside the table
+        3. Edit the second row status cell
+        4. Save and reopen
+    validations:
+      required: true
+  - type: textarea
+    id: markdown
+    attributes:
+      label: Markdown sample
+      description: Paste the smallest `.md` snippet that reproduces the bug.
+      render: markdown
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

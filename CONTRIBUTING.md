@@ -20,6 +20,7 @@ The project is now a native macOS app built with SwiftUI, AppKit interop, and Sw
 
 ```bash
 swift build
+swift test
 ./script/build_and_run.sh
 ```
 
@@ -28,6 +29,7 @@ Useful checks:
 ```bash
 ./script/build_and_run.sh --sample
 ./script/build_and_run.sh --verify
+swift test
 ```
 
 ## Contribution Guidelines
@@ -37,14 +39,17 @@ Useful checks:
 3. Prefer native macOS patterns over custom web-style UI abstractions
 4. Keep AppKit interop narrow and explicit
 5. Update sample Markdown docs when product behavior changes enough that the current examples become misleading
-6. Run `swift build` before opening a PR
+6. Run `swift build` and `swift test` before opening a PR
+7. Expect GitHub Actions CI to stay green on your branch
 
 ## Testing Expectations
 
 - Verify the app builds successfully
+- Run `swift test`
 - Manually test the affected document workflow
 - If you change the editor bridge or document canvas, test both `Document` and `Markdown` modes
 - If you change table behavior, confirm the resulting `.md` table remains valid and readable
+- If you change workspace or review flows, verify live refresh and review-baseline capture on a real Markdown file
 
 ## Questions
 

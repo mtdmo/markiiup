@@ -5,6 +5,7 @@ struct EditorPaneView: View {
     @Binding var text: String
     @ObservedObject var editorState: MarkdownEditorState
     let metrics: DocumentMetrics
+    let reviewSummary: ReviewBaselineSummary?
     let mode: WorkspaceMode
 
     var body: some View {
@@ -30,6 +31,13 @@ struct EditorPaneView: View {
                 Text(subtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                if let reviewSummary {
+                    Text(reviewSummary.compactLabel)
+                        .font(.caption2)
+                        .foregroundStyle(reviewSummary.hasChanges ? .orange : .secondary)
+                        .lineLimit(2)
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)

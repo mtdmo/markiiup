@@ -2,10 +2,13 @@ import SwiftUI
 
 struct SidebarView: View {
     let analysis: MarkdownAnalysis
+    @ObservedObject var reviewBaselineStore: ReviewBaselineStore
     @ObservedObject var workspaceStore: WorkspaceStore
     let currentFileURL: URL?
     @Binding var query: String
     let currentLine: Int
+    let captureBaseline: () -> Void
+    let clearBaseline: () -> Void
     let jumpToLine: (Int) -> Void
 
     private let maxWorkspaceRows = 100
@@ -35,6 +38,18 @@ struct SidebarView: View {
                         Text("\(workspaceStore.files.count) Markdown files")
                             .font(.caption)
                             .foregroundStyle(.secondary)
+
+                        if workspaceStore.isWatchingWorkspace {
+                            Text("Live updates on")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 3)
+                                .background(
+                                    Capsule(style: .continuous)
+                                        .fill(Color.accentColor.opacity(0.10))
+                                )
+                        }
 
                         Spacer()
 
@@ -67,6 +82,15 @@ struct SidebarView: View {
                     Button("Choose Folder") {
                         workspaceStore.chooseFolder()
                     }
+                }
+            }
+
+            Section("Review Baseline") {
+                if currentFileURL == nil {
+                    Text("Save the document to capture a reusable review baseline.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    reviewBaselineSection
                 }
             }
 
@@ -244,6 +268,74 @@ struct SidebarView: View {
         )
     }
 
+    @ViewBuilder
+    private var reviewBaselineSection: some View {
+        if let summary = reviewBaselineStore.summary {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Captured \(summary.capturedAt.formatted(date: .abbreviated, time: .shortened))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                if summary.hasChanges {
+                    baselineMetricRow("Lines", value: "+\(summary.addedLineCount) / -\(summary.removedLineCount)")
+
+                    if summary.addedTableCount > 0 || summary.removedTableCount > 0 {
+                        baselineMetricRow("Tables", value: "+\(summary.addedTableCount) / -\(summary.removedTableCount)")
+                    }
+
+                    if summary.addedSQLBlockCount > 0 || summary.removedSQLBlockCount > 0 {
+                        baselineMetricRow("SQL", value: "+\(summary.addedSQLBlockCount) / -\(summary.removedSQLBlockCount)")
+                    }
+
+                    if summary.openTaskDelta != 0 || summary.completedTaskDelta != 0 {
+                        baselineMetricRow(
+                            "Tasks",
+                            value: "open \(ReviewBaselineSummary.signed(summary.openTaskDelta)), done \(ReviewBaselineSummary.signed(summary.completedTaskDelta))"
+                        )
+                    }
+
+                    if summary.linkDelta != 0 {
+                        baselineMetricRow("Links", value: ReviewBaselineSummary.signed(summary.linkDelta))
+                    }
+                } else {
+                    Text("No document changes detected since the current review baseline.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack(spacing: 8) {
+                    Button("Update Baseline") {
+                        captureBaseline()
+                    }
+
+                    Button("Clear") {
+                        clearBaseline()
+                    }
+                    .foregroundStyle(.red)
+                }
+            }
+
+            if let storageError = reviewBaselineStore.storageError {
+                Text(storageError)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+        } else {
+            Text("Capture the current file as a baseline, then use the canvas to see what changed since that review point.")
+                .foregroundStyle(.secondary)
+
+            Button("Capture Baseline") {
+                captureBaseline()
+            }
+
+            if let storageError = reviewBaselineStore.storageError {
+                Text(storageError)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+        }
+    }
+
     private var filteredRelatedFiles: [ResolvedWorkspaceLink] {
         workspaceStore.relatedFiles(for: analysis, currentFileURL: currentFileURL)
             .filter { item in
@@ -325,5 +417,15 @@ struct SidebarView: View {
         }
         .buttonStyle(.plain)
         .disabled(isCurrentDocument)
+    }
+
+    private func baselineMetricRow(_ title: String, value: String) -> some View {
+        HStack {
+            Text(title)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .font(.caption.monospacedDigit())
+        }
     }
 }

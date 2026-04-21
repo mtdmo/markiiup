@@ -29,10 +29,20 @@ enum MarkdownTextStyler {
     private static let wikiLinkRegex = try! NSRegularExpression(pattern: "\\[\\[([^\\]]+)\\]\\]")
     private static let tagRegex = try! NSRegularExpression(pattern: "(?<!\\w)#([A-Za-z0-9_-]+)\\b")
 
-    static func apply(to textView: NSTextView, text: String, presentation: WorkspaceMode) {
+    static func apply(
+        to textView: NSTextView,
+        text: String,
+        presentation: WorkspaceMode,
+        editedRange: NSRange? = nil,
+        forceFullLayout: Bool = false
+    ) {
         switch presentation {
         case .document:
-            applyDocumentPresentation(to: textView, text: text)
+            if forceFullLayout || editedRange == nil {
+                applyDocumentPresentation(to: textView, text: text)
+            } else {
+                applyIncrementalDocumentPresentation(to: textView, text: text, editedRange: editedRange!)
+            }
         case .markdown:
             applyMarkdownPresentation(to: textView, text: text)
         }
@@ -42,9 +52,11 @@ enum MarkdownTextStyler {
         let fullRange = NSRange(location: 0, length: (text as NSString).length)
         let storage = textView.textStorage
         storage?.beginEditing()
+
         if fullRange.length > 0 {
             storage?.setAttributes(markdownBaseAttributes, range: fullRange)
         }
+
         storage?.endEditing()
 
         textView.backgroundColor = .textBackgroundColor
@@ -62,12 +74,46 @@ enum MarkdownTextStyler {
 
         if fullRange.length > 0 {
             storage?.setAttributes(documentBaseAttributes, range: fullRange)
-            let protectedRanges = applyLineLevelStyles(in: text, storage: storage)
-            applyInlineStyles(in: text, storage: storage, protectedRanges: protectedRanges)
+            let protectedRanges = applyLineLevelStyles(in: text, storage: storage, scopeRange: nil)
+            applyInlineStyles(in: text, storage: storage, protectedRanges: protectedRanges, searchRange: fullRange)
         }
 
         storage?.endEditing()
+        applyDocumentViewConfiguration(to: textView)
+    }
 
+    private static func applyIncrementalDocumentPresentation(
+        to textView: NSTextView,
+        text: String,
+        editedRange: NSRange
+    ) {
+        let nsText = text as NSString
+        let fullRange = NSRange(location: 0, length: nsText.length)
+
+        guard fullRange.length > 0 else {
+            applyDocumentViewConfiguration(to: textView)
+            return
+        }
+
+        let clampedEditedRange = clamp(editedRange, maxLength: nsText.length)
+
+        guard !shouldUseFullDocumentPass(for: clampedEditedRange, in: text) else {
+            applyDocumentPresentation(to: textView, text: text)
+            return
+        }
+
+        let scopedRange = expandedParagraphRange(for: clampedEditedRange, in: nsText)
+        let storage = textView.textStorage
+        storage?.beginEditing()
+        storage?.setAttributes(documentBaseAttributes, range: scopedRange)
+        let protectedRanges = applyLineLevelStyles(in: text, storage: storage, scopeRange: scopedRange)
+        applyInlineStyles(in: text, storage: storage, protectedRanges: protectedRanges, searchRange: scopedRange)
+        storage?.endEditing()
+
+        applyDocumentViewConfiguration(to: textView)
+    }
+
+    private static func applyDocumentViewConfiguration(to textView: NSTextView) {
         textView.backgroundColor = NSColor.windowBackgroundColor
         textView.textContainerInset = NSSize(width: 56, height: 36)
         textView.typingAttributes = documentTypingAttributes
@@ -75,7 +121,11 @@ enum MarkdownTextStyler {
         textView.insertionPointColor = .labelColor
     }
 
-    private static func applyLineLevelStyles(in text: String, storage: NSTextStorage?) -> [NSRange] {
+    private static func applyLineLevelStyles(
+        in text: String,
+        storage: NSTextStorage?,
+        scopeRange: NSRange?
+    ) -> [NSRange] {
         var protectedRanges: [NSRange] = []
         var inFrontMatter = false
         var inCodeBlock = false
@@ -85,21 +135,28 @@ enum MarkdownTextStyler {
         while index < lines.count {
             let line = lines[index]
             let trimmed = line.text.trimmingCharacters(in: .whitespaces)
+            let lineIntersectsScope = scopeRange.map { NSIntersectionRange($0, line.range).length > 0 } ?? true
 
             if index == 0, trimmed == "---" {
                 inFrontMatter = true
-                applyAttributes(frontMatterBoundaryAttributes, to: line.range, storage: storage)
-                protectedRanges.append(line.range)
+                if lineIntersectsScope {
+                    applyAttributes(frontMatterBoundaryAttributes, to: line.range, storage: storage)
+                    protectedRanges.append(line.range)
+                }
                 index += 1
                 continue
             }
 
             if inFrontMatter {
-                applyAttributes(frontMatterAttributes, to: line.range, storage: storage)
-                protectedRanges.append(line.range)
+                if lineIntersectsScope {
+                    applyAttributes(frontMatterAttributes, to: line.range, storage: storage)
+                    protectedRanges.append(line.range)
+                }
 
                 if trimmed == "---" {
-                    applyAttributes(frontMatterBoundaryAttributes, to: line.range, storage: storage)
+                    if lineIntersectsScope {
+                        applyAttributes(frontMatterBoundaryAttributes, to: line.range, storage: storage)
+                    }
                     inFrontMatter = false
                 }
 
@@ -108,24 +165,40 @@ enum MarkdownTextStyler {
             }
 
             if trimmed.hasPrefix("```") {
-                applyAttributes(codeFenceAttributes, to: line.range, storage: storage)
-                protectedRanges.append(line.range)
+                if lineIntersectsScope {
+                    applyAttributes(codeFenceAttributes, to: line.range, storage: storage)
+                    protectedRanges.append(line.range)
+                }
                 inCodeBlock.toggle()
                 index += 1
                 continue
             }
 
             if inCodeBlock {
-                applyAttributes(codeBlockAttributes, to: line.range, storage: storage)
-                protectedRanges.append(line.range)
+                if lineIntersectsScope {
+                    applyAttributes(codeBlockAttributes, to: line.range, storage: storage)
+                    protectedRanges.append(line.range)
+                }
                 index += 1
                 continue
             }
 
             if let tableBlock = parseTableBlock(at: index, from: lines) {
-                applyTableStyle(tableBlock, storage: storage)
-                protectedRanges.append(contentsOf: tableBlock.lines.map(\.range))
+                let blockIntersectsScope = scopeRange.map { range in
+                    tableBlock.lines.contains { NSIntersectionRange($0.range, range).length > 0 }
+                } ?? true
+
+                if blockIntersectsScope {
+                    applyTableStyle(tableBlock, storage: storage)
+                    protectedRanges.append(contentsOf: tableBlock.lines.map(\.range))
+                }
+
                 index = tableBlock.nextIndex
+                continue
+            }
+
+            guard lineIntersectsScope else {
+                index += 1
                 continue
             }
 
@@ -359,15 +432,13 @@ enum MarkdownTextStyler {
     private static func applyInlineStyles(
         in text: String,
         storage: NSTextStorage?,
-        protectedRanges: [NSRange]
+        protectedRanges: [NSRange],
+        searchRange: NSRange
     ) {
-        let nsText = text as NSString
-        let fullRange = NSRange(location: 0, length: nsText.length)
-
         applyRegex(
             boldRegex,
             in: text,
-            fullRange: fullRange,
+            searchRange: searchRange,
             protectedRanges: protectedRanges
         ) { match in
             let wholeRange = match.range
@@ -387,7 +458,7 @@ enum MarkdownTextStyler {
         applyRegex(
             italicRegex,
             in: text,
-            fullRange: fullRange,
+            searchRange: searchRange,
             protectedRanges: protectedRanges
         ) { match in
             let wholeRange = match.range
@@ -407,7 +478,7 @@ enum MarkdownTextStyler {
         applyRegex(
             inlineCodeRegex,
             in: text,
-            fullRange: fullRange,
+            searchRange: searchRange,
             protectedRanges: protectedRanges
         ) { match in
             let wholeRange = match.range
@@ -431,7 +502,7 @@ enum MarkdownTextStyler {
         applyRegex(
             markdownLinkRegex,
             in: text,
-            fullRange: fullRange,
+            searchRange: searchRange,
             protectedRanges: protectedRanges
         ) { match in
             let wholeRange = match.range
@@ -464,7 +535,7 @@ enum MarkdownTextStyler {
         applyRegex(
             wikiLinkRegex,
             in: text,
-            fullRange: fullRange,
+            searchRange: searchRange,
             protectedRanges: protectedRanges
         ) { match in
             let wholeRange = match.range
@@ -488,7 +559,7 @@ enum MarkdownTextStyler {
         applyRegex(
             tagRegex,
             in: text,
-            fullRange: fullRange,
+            searchRange: searchRange,
             protectedRanges: protectedRanges
         ) { match in
             applyAttributes(
@@ -506,11 +577,11 @@ enum MarkdownTextStyler {
     private static func applyRegex(
         _ regex: NSRegularExpression,
         in text: String,
-        fullRange: NSRange,
+        searchRange: NSRange,
         protectedRanges: [NSRange],
         handler: (NSTextCheckingResult) -> Void
     ) {
-        regex.matches(in: text, range: fullRange).forEach { match in
+        regex.matches(in: text, range: searchRange).forEach { match in
             guard !intersectsProtectedRanges(match.range, protectedRanges: protectedRanges) else {
                 return
             }
@@ -545,6 +616,80 @@ enum MarkdownTextStyler {
         return lines
     }
 
+    private static func shouldUseFullDocumentPass(for editedRange: NSRange, in text: String) -> Bool {
+        let nsText = text as NSString
+        let clampedRange = clamp(editedRange, maxLength: nsText.length)
+
+        if clampedRange.length > 0,
+           nsText.substring(with: clampedRange).contains("\n") {
+            return true
+        }
+
+        let editedLines = lineNumbers(for: clampedRange, in: text)
+
+        if frontMatterLineRange(in: text).map({ rangesIntersect($0, editedLines) }) == true {
+            return true
+        }
+
+        let analysis = MarkdownReviewParser.analyze(text)
+
+        if analysis.tables.contains(where: { rangesIntersect($0.startLine...$0.endLine, editedLines) }) {
+            return true
+        }
+
+        if analysis.codeBlocks.contains(where: { rangesIntersect($0.startLine...$0.endLine, editedLines) }) {
+            return true
+        }
+
+        return false
+    }
+
+    private static func expandedParagraphRange(for editedRange: NSRange, in nsText: NSString) -> NSRange {
+        var range = nsText.paragraphRange(for: editedRange)
+
+        if range.location > 0 {
+            let previousLineRange = nsText.lineRange(for: NSRange(location: max(range.location - 1, 0), length: 0))
+            range = NSUnionRange(range, previousLineRange)
+        }
+
+        if NSMaxRange(range) < nsText.length {
+            let nextLocation = min(NSMaxRange(range), nsText.length - 1)
+            let nextLineRange = nsText.lineRange(for: NSRange(location: nextLocation, length: 0))
+            range = NSUnionRange(range, nextLineRange)
+        }
+
+        return clamp(range, maxLength: nsText.length)
+    }
+
+    private static func lineNumbers(for range: NSRange, in text: String) -> ClosedRange<Int> {
+        let nsText = text as NSString
+        let safeRange = clamp(range, maxLength: nsText.length)
+        let startLine = lineNumber(at: safeRange.location, in: text)
+        let endLocation = max(safeRange.location, NSMaxRange(safeRange) - 1)
+        let endLine = lineNumber(at: endLocation, in: text)
+        return startLine...max(startLine, endLine)
+    }
+
+    private static func lineNumber(at location: Int, in text: String) -> Int {
+        let nsText = text as NSString
+        let safeLocation = min(max(location, 0), nsText.length)
+        let prefix = nsText.substring(to: safeLocation)
+        return max(1, prefix.components(separatedBy: "\n").count)
+    }
+
+    private static func frontMatterLineRange(in text: String) -> ClosedRange<Int>? {
+        let lines = text.replacingOccurrences(of: "\r\n", with: "\n").components(separatedBy: "\n")
+        guard lines.first?.trimmingCharacters(in: .whitespacesAndNewlines) == "---" else {
+            return nil
+        }
+
+        for index in 1..<lines.count where lines[index].trimmingCharacters(in: .whitespacesAndNewlines) == "---" {
+            return 1...(index + 1)
+        }
+
+        return 1...lines.count
+    }
+
     private static func applyAttributes(
         _ attributes: [NSAttributedString.Key: Any],
         to range: NSRange,
@@ -555,6 +700,12 @@ enum MarkdownTextStyler {
         }
 
         storage?.addAttributes(attributes, range: range)
+    }
+
+    private static func clamp(_ range: NSRange, maxLength: Int) -> NSRange {
+        let location = min(max(range.location, 0), maxLength)
+        let length = min(max(range.length, 0), max(0, maxLength - location))
+        return NSRange(location: location, length: length)
     }
 
     private static func shiftedRange(_ range: NSRange, by offset: Int) -> NSRange {
@@ -618,6 +769,10 @@ enum MarkdownTextStyler {
         return trimmed.allSatisfy { character in
             character == "-" || character == ":"
         } && trimmed.contains("-")
+    }
+
+    private static func rangesIntersect(_ lhs: ClosedRange<Int>, _ rhs: ClosedRange<Int>) -> Bool {
+        lhs.overlaps(rhs)
     }
 
     private static func applyPipeSyntaxStyle(in line: LineSlice, font: NSFont, storage: NSTextStorage?) {
